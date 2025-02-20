@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import lombok.AllArgsConstructor;
 public class Visite {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "idAnnuncio")
@@ -23,8 +25,13 @@ public class Visite {
     @JoinColumn(name = "idCliente")
     private Users cliente;
 
+    @Column(nullable = false, name = "data")
     private java.time.LocalDate data;
+
+    @Column(nullable = false, name = "orarioInizio")
     private java.time.LocalTime orarioInizio;
+
+    @Column(nullable = false, name = "orarioFine")
     private java.time.LocalTime orarioFine;
 
     @Enumerated(EnumType.STRING)

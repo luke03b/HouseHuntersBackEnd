@@ -1,5 +1,5 @@
 package com.househuntersBackEnd.demo.Enumerations;
 
 public enum Piano {
-    TERRA, ULTIMO, NUMERO;
+    TERRA, ULTIMO, INTERMEDIO;
 }

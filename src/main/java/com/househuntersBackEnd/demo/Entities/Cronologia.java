@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -12,7 +14,7 @@ import lombok.AllArgsConstructor;
 public class Cronologia {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "idCliente")
@@ -22,5 +24,6 @@ public class Cronologia {
     @JoinColumn(name = "idAnnuncio")
     private Annunci annuncio;
 
+    @Column(nullable = false, name = "dataVisualizzazione")
     private java.time.LocalDateTime dataVisualizzazione;
 }

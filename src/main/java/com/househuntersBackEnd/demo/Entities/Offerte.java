@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import lombok.AllArgsConstructor;
 public class Offerte {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "idAnnuncio")
@@ -23,12 +25,17 @@ public class Offerte {
     @JoinColumn(name = "idCliente")
     private Users cliente;
 
+    @Column(nullable = false, name = "prezzo")
     private double prezzo;
+
+    @Column(nullable = false, name = "data")
     private java.time.LocalDate data;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "stato")
     private StatoOfferta stato;
 
+    @Column(nullable = false, name = "controProposta")
     private Double controProposta;
 }
 
