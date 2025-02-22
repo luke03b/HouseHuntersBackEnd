@@ -2,6 +2,7 @@ package com.househuntersBackEnd.demo.Entities;
 
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
+import com.househuntersBackEnd.demo.Enumerations.TipoAnnuncio;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,8 @@ public class Annunci {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-//    @Column(nullable = false, name = "tipo_annuncio")
-//    private boolean tipo_annuncio;
+    @Column(nullable = false, name = "tipo_annuncio")
+    private TipoAnnuncio tipo_annuncio;
 
     @Column(nullable = false, name = "prezzo")
     private double prezzo;

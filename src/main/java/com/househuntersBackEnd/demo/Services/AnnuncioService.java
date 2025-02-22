@@ -1,15 +1,22 @@
 package com.househuntersBackEnd.demo.Services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.househuntersBackEnd.demo.AnnunciSpecification;
 import com.househuntersBackEnd.demo.Entities.Annunci;
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
 import com.househuntersBackEnd.demo.Repositories.AnnuncioRepository;
+import com.househuntersBackEnd.demo.Utils.AnnuncioUtils;
+import com.househuntersBackEnd.demo.Utils.GeoUtils;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,11 +25,17 @@ public class AnnuncioService {
 
     @Autowired
     private AnnuncioRepository annuncioRepository;
+    private final AnnuncioUtils annuncioUtils = new AnnuncioUtils();
+
 
     public Annunci createAnnuncio(Annunci annuncio) {
         annuncio.setData_creazione(LocalDateTime.now());
+
+        annuncioUtils.setVicinanze(annuncio);
+
         return annuncioRepository.save(annuncio);
     }
+
 
     public List<Annunci> getAnnunci(
             Double prezzoMinimo,
@@ -44,7 +57,8 @@ public class AnnuncioService {
             Piano piano,
             String indirizzo,
             Double latitudine,
-            Double longitudine
+            Double longitudine,
+            Double raggioKm
     ) {
         Specification<Annunci> spec = Specification.where(null);
 
@@ -66,8 +80,17 @@ public class AnnuncioService {
         if (classeEnergetica != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(classeEnergetica));
         if (piano != null) spec = spec.and(AnnunciSpecification.hasPiano(piano));
         if (indirizzo != null) spec = spec.and(AnnunciSpecification.hasIndirizzo(indirizzo));
-        if (latitudine != null) spec = spec.and(AnnunciSpecification.hasLatitudine(latitudine));
-        if (longitudine != null) spec = spec.and(AnnunciSpecification.hasLongitudine(longitudine));
+
+        if (latitudine != null && longitudine != null && raggioKm != null) {
+            double[] deltas = GeoUtils.kmToDegrees(latitudine, raggioKm);
+            double minLat = latitudine - deltas[0];
+            double maxLat = latitudine + deltas[0];
+            double minLon = longitudine - deltas[1];
+            double maxLon = longitudine + deltas[1];
+
+            spec = spec.and(AnnunciSpecification.hasLatitudineBetween(minLat, maxLat))
+                    .and(AnnunciSpecification.hasLongitudineBetween(minLon, maxLon));
+        }
 
         return annuncioRepository.findAll(spec);
     }

@@ -105,4 +105,14 @@ public class AnnunciSpecification {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("longitudine"), longitudine);
     }
+
+    public static Specification<Annunci> hasLatitudineBetween(double minLat, double maxLat) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.between(root.get("latitudine"), minLat, maxLat);
+    }
+
+    public static Specification<Annunci> hasLongitudineBetween(double minLon, double maxLon) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.between(root.get("longitudine"), minLon, maxLon);
+    }
 }
