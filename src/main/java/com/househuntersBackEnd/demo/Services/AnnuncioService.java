@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,7 +20,7 @@ public class AnnuncioService {
     private AnnuncioRepository annuncioRepository;
 
     public Annunci createAnnuncio(Annunci annuncio) {
-        annuncio.setData_creazione(LocalDate.now());
+        annuncio.setData_creazione(LocalDateTime.now());
         return annuncioRepository.save(annuncio);
     }
 

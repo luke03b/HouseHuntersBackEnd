@@ -18,6 +18,9 @@ public class Annunci {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+//    @Column(nullable = false, name = "tipo_annuncio")
+//    private boolean tipo_annuncio;
+
     @Column(nullable = false, name = "prezzo")
     private double prezzo;
 
@@ -66,7 +69,7 @@ public class Annunci {
     private Integer numero_piano;
 
     @Column(nullable = false, name = "data_creazione")
-    private java.time.LocalDate data_creazione;
+    private java.time.LocalDateTime data_creazione;
 
     @ManyToOne
     @JoinColumn(name = "idAgente")
