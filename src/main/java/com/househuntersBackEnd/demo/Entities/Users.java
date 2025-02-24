@@ -26,8 +26,8 @@ public class Users {
     private UserType tipo;
 
     //FK all'agenzia
-    @ManyToOne
-    @JoinColumn(name = "idagenzia", nullable = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "idagenzia", nullable = true)
     private AgenziaImmobiliare agenzia;
 }
 

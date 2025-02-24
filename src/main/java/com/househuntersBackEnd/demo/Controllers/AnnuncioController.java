@@ -55,4 +55,10 @@ public class AnnuncioController {
                 ascensore, piscina, arredo, balcone, giardino, vicino_scuole, vicino_parchi,
                 vicino_trasporti, classeEnergetica, piano, indirizzo, latitudine, longitudine, raggioKm);
     }
+
+    @GetMapping("/agente")
+    public ResponseEntity<List<Annunci>> getAnnunciByAgenteSub(@RequestParam String sub) {
+        List<Annunci> annunci = annuncioService.getAnnunciByAgenteSub(sub);
+        return new ResponseEntity<>(annunci, HttpStatus.OK);
+    }
 }

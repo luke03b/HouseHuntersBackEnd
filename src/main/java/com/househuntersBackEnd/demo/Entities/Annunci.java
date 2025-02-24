@@ -20,6 +20,7 @@ public class Annunci {
     private UUID id;
 
     @Column(nullable = false, name = "tipo_annuncio")
+    @Enumerated(EnumType.STRING)
     private TipoAnnuncio tipo_annuncio;
 
     @Column(nullable = false, name = "prezzo")

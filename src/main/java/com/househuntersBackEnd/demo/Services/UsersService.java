@@ -13,4 +13,8 @@ public class UsersService {
     public Users createUser(Users user) {
         return usersRepository.save(user);
     }
+
+    public Users getUserBySub(String sub) {
+        return usersRepository.findUsersBySub(sub).orElseThrow(() -> new RuntimeException("Utente non trovato con sub: " + sub));
+    }
 }

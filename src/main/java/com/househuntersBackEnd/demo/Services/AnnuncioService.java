@@ -94,4 +94,8 @@ public class AnnuncioService {
 
         return annuncioRepository.findAll(spec);
     }
+
+    public List<Annunci> getAnnunciByAgenteSub(String sub) {
+        return annuncioRepository.findByAgenteSub(sub);
+    }
 }
