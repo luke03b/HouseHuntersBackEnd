@@ -48,12 +48,13 @@ public class AnnuncioController {
             @RequestParam(required = false) String indirizzo,
             @RequestParam(required = false) Double latitudine,
             @RequestParam(required = false) Double longitudine,
-            @RequestParam(required = false) Double raggioKm
+            @RequestParam(required = false) Double raggioKm,
+            @RequestParam(required = false) String tipo_annuncio
     ) {
         return annuncioService.getAnnunci(prezzoMinimo, prezzoMassimo, superficieMinima,
                 superficieMassima, numStanzeMinime, numStanzeMassime, garage,
                 ascensore, piscina, arredo, balcone, giardino, vicino_scuole, vicino_parchi,
-                vicino_trasporti, classeEnergetica, piano, indirizzo, latitudine, longitudine, raggioKm);
+                vicino_trasporti, classeEnergetica, piano, indirizzo, latitudine, longitudine, raggioKm, tipo_annuncio);
     }
 
     @GetMapping("/agente")

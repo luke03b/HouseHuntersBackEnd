@@ -58,7 +58,8 @@ public class AnnuncioService {
             String indirizzo,
             Double latitudine,
             Double longitudine,
-            Double raggioKm
+            Double raggioKm,
+            String tipo_annuncio
     ) {
         Specification<Annunci> spec = Specification.where(null);
 
@@ -80,6 +81,7 @@ public class AnnuncioService {
         if (classeEnergetica != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(classeEnergetica));
         if (piano != null) spec = spec.and(AnnunciSpecification.hasPiano(piano));
         if (indirizzo != null) spec = spec.and(AnnunciSpecification.hasIndirizzo(indirizzo));
+        if (tipo_annuncio != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(tipo_annuncio));
 
         if (latitudine != null && longitudine != null && raggioKm != null) {
             double[] deltas = GeoUtils.kmToDegrees(latitudine, raggioKm);
