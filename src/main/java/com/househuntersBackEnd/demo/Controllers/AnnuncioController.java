@@ -2,6 +2,7 @@ package com.househuntersBackEnd.demo.Controllers;
 
 import com.househuntersBackEnd.demo.AnnunciSpecification;
 import com.househuntersBackEnd.demo.Entities.Annunci;
+import com.househuntersBackEnd.demo.Entities.FiltriRicerca;
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
 import com.househuntersBackEnd.demo.Services.AnnuncioService;
@@ -51,10 +52,30 @@ public class AnnuncioController {
             @RequestParam(required = false) Double raggioKm,
             @RequestParam(required = false) String tipo_annuncio
     ) {
-        return annuncioService.getAnnunci(prezzoMinimo, prezzoMassimo, superficieMinima,
-                superficieMassima, numStanzeMinime, numStanzeMassime, garage,
-                ascensore, piscina, arredo, balcone, giardino, vicino_scuole, vicino_parchi,
-                vicino_trasporti, classeEnergetica, piano, indirizzo, latitudine, longitudine, raggioKm, tipo_annuncio);
+        FiltriRicerca filtriRicerca = new FiltriRicerca(
+                tipo_annuncio,
+                latitudine,
+                longitudine,
+                raggioKm,
+                prezzoMinimo,
+                prezzoMassimo,
+                superficieMinima,
+                superficieMassima,
+                numStanzeMinime,
+                numStanzeMassime,
+                garage,
+                ascensore,
+                piscina,
+                arredo,
+                balcone,
+                giardino,
+                vicino_scuole,
+                vicino_parchi,
+                vicino_trasporti,
+                classeEnergetica,
+                piano
+        );
+        return annuncioService.getAnnunci(filtriRicerca);
     }
 
     @GetMapping("/agente")
