@@ -83,4 +83,11 @@ public class AnnuncioController {
         List<Annunci> annunci = annuncioService.getAnnunciByAgenteSub(sub);
         return new ResponseEntity<>(annunci, HttpStatus.OK);
     }
+
+    @GetMapping("/cliente/cronologia")
+    public ResponseEntity<List<Annunci>> getAnnunciByClienteId(@RequestParam String id) {
+        List<Annunci> annunci = annuncioService.getAnnunciByClienteId(id);
+        return new ResponseEntity<>(annunci, HttpStatus.OK);
+    }
+
 }

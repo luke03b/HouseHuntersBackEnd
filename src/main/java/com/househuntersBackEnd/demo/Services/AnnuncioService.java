@@ -79,4 +79,9 @@ public class AnnuncioService {
     public List<Annunci> getAnnunciByAgenteSub(String sub) {
         return annuncioRepository.findByAgenteSub(sub);
     }
+
+    public List<Annunci> getAnnunciByClienteId(String id) {
+        return annuncioRepository.findUltimiTreAnnunciByIdCliente(id);
+    }
+
 }
