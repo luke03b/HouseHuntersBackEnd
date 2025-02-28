@@ -29,13 +29,13 @@ public class Offerte {
     private double prezzo;
 
     @Column(nullable = false, name = "data")
-    private java.time.LocalDate data;
+    private java.time.LocalDateTime data;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "stato")
     private StatoOfferta stato;
 
-    @Column(nullable = false, name = "controProposta")
+    @Column(nullable = true, name = "controProposta")
     private Double controProposta;
 }
 
