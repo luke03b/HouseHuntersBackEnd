@@ -1,25 +1,18 @@
 package com.househuntersBackEnd.demo.Services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.househuntersBackEnd.demo.AnnunciSpecification;
 import com.househuntersBackEnd.demo.Entities.Annunci;
 import com.househuntersBackEnd.demo.Entities.FiltriRicerca;
-import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
-import com.househuntersBackEnd.demo.Enumerations.Piano;
 import com.househuntersBackEnd.demo.Repositories.AnnuncioRepository;
 import com.househuntersBackEnd.demo.Utils.AnnuncioUtils;
 import com.househuntersBackEnd.demo.Utils.GeoUtils;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AnnuncioService {
@@ -80,8 +73,8 @@ public class AnnuncioService {
         return annuncioRepository.findByAgenteSub(sub);
     }
 
-    public List<Annunci> getAnnunciByClienteId(String id) {
-        return annuncioRepository.findUltimiTreAnnunciByIdCliente(id);
+    public List<Annunci> getAnnunciRecentiByClienteId(String id) {
+        return annuncioRepository.findAnnunciRecentementeVisualizzatiByIdCliente(id);
     }
 
 }

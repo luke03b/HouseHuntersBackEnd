@@ -30,4 +30,8 @@ public class OfferteService {
     public List<Offerte> getAllOfferteOnAnnuncio(UUID idAnnuncio) {
         return offerteRepository.findOfferteByAnnuncioId(idAnnuncio);
     }
+
+    public List<Offerte> getOfferteConAnnuncioByClienteId(UUID idCliente) {
+        return offerteRepository.findOfferteConAnnuncioByClienteId(idCliente);
+    }
 }

@@ -45,4 +45,9 @@ public class OfferteController {
     public List<Offerte> getOfferteByAnnuncio(@RequestParam UUID idAnnuncio) {
        return offerteService.getAllOfferteOnAnnuncio(idAnnuncio);
     }
+
+    @GetMapping("/cliente")
+    public List<Offerte> getOfferteConAnnuncioByCliente(@RequestParam UUID idCliente) {
+        return offerteService.getOfferteConAnnuncioByClienteId(idCliente);
+    }
 }

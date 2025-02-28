@@ -24,7 +24,6 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
         ORDER BY latest.data_visualizzazione DESC
         LIMIT 5
     """, nativeQuery = true)
-    List<Annunci> findUltimiTreAnnunciByIdCliente(@Param("idCliente") String idCliente);
-
+    List<Annunci> findAnnunciRecentementeVisualizzatiByIdCliente(@Param("idCliente") String idCliente);
 
 }

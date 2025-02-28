@@ -1,18 +1,17 @@
 package com.househuntersBackEnd.demo.Controllers;
 
-import com.househuntersBackEnd.demo.AnnunciSpecification;
 import com.househuntersBackEnd.demo.Entities.Annunci;
 import com.househuntersBackEnd.demo.Entities.FiltriRicerca;
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
 import com.househuntersBackEnd.demo.Services.AnnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/annunci")
@@ -85,8 +84,8 @@ public class AnnuncioController {
     }
 
     @GetMapping("/cliente/cronologia")
-    public ResponseEntity<List<Annunci>> getAnnunciByClienteId(@RequestParam String id) {
-        List<Annunci> annunci = annuncioService.getAnnunciByClienteId(id);
+    public ResponseEntity<List<Annunci>> getAnnunciRecentiByClienteId(@RequestParam String id) {
+        List<Annunci> annunci = annuncioService.getAnnunciRecentiByClienteId(id);
         return new ResponseEntity<>(annunci, HttpStatus.OK);
     }
 
