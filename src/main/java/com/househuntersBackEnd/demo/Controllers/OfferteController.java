@@ -23,15 +23,15 @@ public class OfferteController {
 
     @PostMapping
     public ResponseEntity<?> createOfferte(@RequestBody Offerte offerte) {
-        Offerte newOfferte = null;
+        Offerte newOfferta;
         try {
-            newOfferte = offerteService.createOfferte(offerte);
+            newOfferta = offerteService.createOfferte(offerte);
         } catch (OffertaInAttesaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Esiste già un'offerta in attesa per questo annuncio.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-        return new ResponseEntity<>(newOfferte, HttpStatus.CREATED);
+        return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
     }
 
     @ExceptionHandler(OffertaInAttesaEsistenteException.class)
