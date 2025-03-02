@@ -20,6 +20,15 @@ public class Users {
     @Column(unique = true, nullable = false, name = "sub")
     private String sub;
 
+    @Column(nullable = false, name = "email")
+    private String email;
+
+    @Column(nullable = false, name = "nome")
+    private String nome;
+
+    @Column(nullable = false, name = "cognome")
+    private String cognome;
+
     //Enum per CLIENTE, AGENTE, ADMIN
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "tipo")

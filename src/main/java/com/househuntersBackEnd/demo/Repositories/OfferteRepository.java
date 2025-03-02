@@ -20,4 +20,6 @@ public interface OfferteRepository extends JpaRepository<Offerte, UUID> {
     @Query("SELECT o FROM Offerte o WHERE o.cliente.id = :idCliente")
     List<Offerte> findOfferteConAnnuncioByClienteId(@Param("idCliente") UUID idCliente);
 
+    List<Offerte> findOfferteByAnnuncioIdAndStato(UUID idAnnuncio, StatoOfferta statoFormattato);
+
 }

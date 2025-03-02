@@ -1,6 +1,5 @@
 package com.househuntersBackEnd.demo.Controllers;
 
-import com.househuntersBackEnd.demo.Entities.Annunci;
 import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Services.OfferteService;
@@ -9,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/offerte")
@@ -34,6 +30,17 @@ public class OfferteController {
         return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<?> updateStatoOfferte(@RequestBody Offerte offerte, @RequestParam String stato, @RequestParam(required = false) Optional<Double> controproposta) {
+        if(controproposta.isPresent()){
+            offerteService.updateStatoOfferteControproposta(offerte, stato, controproposta);
+        } else {
+            offerteService.updateStatoOfferte(offerte, stato);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @ExceptionHandler(OffertaInAttesaEsistenteException.class)
     public ResponseEntity<Map<String, String>> handleOffertaInAttesaException(OffertaInAttesaEsistenteException ex) {
         Map<String, String> errorResponse = new HashMap<>();
@@ -49,5 +56,10 @@ public class OfferteController {
     @GetMapping("/cliente")
     public List<Offerte> getOfferteConAnnuncioByCliente(@RequestParam UUID idCliente) {
         return offerteService.getOfferteConAnnuncioByClienteId(idCliente);
+    }
+
+    @GetMapping("/stato")
+    public List<Offerte> getOfferteSuAnnuncioByStato(@RequestParam UUID idAnnuncio, @RequestParam String stato) {
+        return offerteService.getOfferteSuAnnuncioByStato(idAnnuncio, stato);
     }
 }
