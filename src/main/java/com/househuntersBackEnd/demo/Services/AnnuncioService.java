@@ -77,4 +77,8 @@ public class AnnuncioService {
         return annuncioRepository.findAnnunciRecentementeVisualizzatiByIdCliente(id);
     }
 
+    public List<Annunci> getAnnunciConOffertePrenotazioniByAgenteSub(String sub, boolean offerte, boolean prenotazioni) {
+        return annuncioRepository.findAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni);
+    }
+
 }

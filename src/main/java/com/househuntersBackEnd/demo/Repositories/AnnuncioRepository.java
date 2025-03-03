@@ -26,4 +26,24 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
     """, nativeQuery = true)
     List<Annunci> findAnnunciRecentementeVisualizzatiByIdCliente(@Param("idCliente") String idCliente);
 
+    @Query("""
+    SELECT DISTINCT a FROM Annunci a
+    LEFT JOIN Offerte o ON a.id = o.annuncio.id
+    LEFT JOIN Visite v ON a.id = v.annuncio.id
+    WHERE a.agente.sub = :sub
+    AND (
+        (:offerte = true AND :prenotazioni = true AND o.id IS NOT NULL AND v.id IS NOT NULL) OR
+        (:offerte = true AND :prenotazioni = false AND o.id IS NOT NULL) OR
+        (:prenotazioni = true AND :offerte = false AND v.id IS NOT NULL) OR
+        (:offerte = false AND :prenotazioni = false)
+    )
+""")
+    List<Annunci> findAnnunciConOffertePrenotazioniByAgenteSub(
+            @Param("sub") String sub,
+            @Param("offerte") boolean offerte,
+            @Param("prenotazioni") boolean prenotazioni
+    );
+
+
+
 }

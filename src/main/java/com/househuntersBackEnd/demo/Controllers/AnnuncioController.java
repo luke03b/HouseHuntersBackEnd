@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/annunci")
@@ -84,8 +83,14 @@ public class AnnuncioController {
     }
 
     @GetMapping("/cliente/cronologia")
-    public ResponseEntity<List<Annunci>> getAnnunciRecentiByClienteId(@RequestParam String id) {
-        List<Annunci> annunci = annuncioService.getAnnunciRecentiByClienteId(id);
+    public ResponseEntity<List<Annunci>> getAnnunciRecentiByClienteId(@RequestParam String idCliente) {
+        List<Annunci> annunci = annuncioService.getAnnunciRecentiByClienteId(idCliente);
+        return new ResponseEntity<>(annunci, HttpStatus.OK);
+    }
+
+    @GetMapping("/agente/offerte-prenotazioni")
+    public ResponseEntity<List<Annunci>> getAnnunciRecentiByClienteId(@RequestParam String sub, @RequestParam boolean offerte, @RequestParam boolean prenotazioni) {
+        List<Annunci> annunci = annuncioService.getAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni);
         return new ResponseEntity<>(annunci, HttpStatus.OK);
     }
 

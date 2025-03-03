@@ -1,7 +1,9 @@
 package com.househuntersBackEnd.demo.Services;
 
 import com.househuntersBackEnd.demo.Entities.Users;
+import com.househuntersBackEnd.demo.Exceptions.UtenteNonTrovatoException;
 import com.househuntersBackEnd.demo.Repositories.UsersRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,15 @@ public class UsersService {
     }
 
     public Users getUserBySub(String sub) {
-        return usersRepository.findUsersBySub(sub).orElseThrow(() -> new RuntimeException("Utente non trovato con sub: " + sub));
+        return usersRepository.findUsersBySub(sub).orElseThrow(UtenteNonTrovatoException::new);
+    }
+
+    @Transactional
+    public void deleteUserBySub(String sub) {
+        if (usersRepository.existsBySub(sub)) {
+            usersRepository.deleteBySub(sub);
+        } else {
+            throw new UtenteNonTrovatoException();
+        }
     }
 }

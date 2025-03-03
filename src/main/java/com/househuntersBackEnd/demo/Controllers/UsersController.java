@@ -25,4 +25,10 @@ public class UsersController {
         Users user = usersService.getUserBySub(sub);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deleteUserBySub(@RequestParam String sub) {
+        usersService.deleteUserBySub(sub);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
