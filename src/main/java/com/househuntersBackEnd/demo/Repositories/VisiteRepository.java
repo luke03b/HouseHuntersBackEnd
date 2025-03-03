@@ -14,4 +14,5 @@ public interface VisiteRepository extends JpaRepository<Visite, UUID> {
     List<Visite> findByAnnuncioId(UUID annuncioId);
     List<Visite> findByClienteId(UUID clienteId);
     boolean existsByAnnuncioAndClienteAndStatoOrStato(Annunci annuncio, Users cliente, StatoVisita stato, StatoVisita stato2);
+    List<Visite> findVisiteByAnnuncioIdAndStato(UUID idAnnuncio, StatoVisita statoFormattato);
 }

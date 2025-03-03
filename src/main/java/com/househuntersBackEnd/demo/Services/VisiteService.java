@@ -1,13 +1,16 @@
 package com.househuntersBackEnd.demo.Services;
 
+import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
 import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Repositories.VisiteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,5 +33,38 @@ public class VisiteService {
     }
     public List<Visite> getTutteVisiteCliente(UUID idCliente) {
         return visiteRepository.findByClienteId(idCliente);
+    }
+    public List<Visite> getVisiteByStatoOnAnnuncio(UUID idAnnuncio, String stato){
+        StatoVisita statoFormattato;
+        if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
+            statoFormattato = StatoVisita.RIFIUTATA;
+        } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
+            statoFormattato = StatoVisita.IN_ATTESA;
+        } else {
+            statoFormattato = StatoVisita.CONFERMATA;
+        }
+
+        return visiteRepository.findVisiteByAnnuncioIdAndStato(idAnnuncio, statoFormattato);
+    }
+
+    public Visite updateStatoVisite(Visite visite, String stato) {
+        Optional<Visite> existingVisita = visiteRepository.findById(visite.getId());
+
+        if (existingVisita.isPresent()) {
+            Visite visitaToUpdate = existingVisita.get();
+
+            if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
+                visitaToUpdate.setStato(StatoVisita.RIFIUTATA);
+            } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
+                visitaToUpdate.setStato(StatoVisita.IN_ATTESA);
+            } else {
+                visitaToUpdate.setStato(StatoVisita.CONFERMATA);
+            }
+
+            // Salva e restituisci l'entità aggiornata
+            return visiteRepository.save(visitaToUpdate);
+        } else {
+            throw new EntityNotFoundException("Offerta non trovata con ID: " + visite.getId());
+        }
     }
 }

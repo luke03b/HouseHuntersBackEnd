@@ -29,12 +29,10 @@ public class Users {
     @Column(nullable = false, name = "cognome")
     private String cognome;
 
-    //Enum per CLIENTE, AGENTE, ADMIN
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "tipo")
     private UserType tipo;
 
-    //FK all'agenzia
     @ManyToOne(optional = true)
     @JoinColumn(name = "idagenzia", nullable = true)
     private AgenziaImmobiliare agenzia;

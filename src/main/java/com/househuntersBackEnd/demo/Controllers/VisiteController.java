@@ -1,5 +1,6 @@
 package com.househuntersBackEnd.demo.Controllers;
 
+import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Services.VisiteService;
@@ -8,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/visite")
@@ -50,5 +48,17 @@ public class VisiteController {
     public ResponseEntity<List<Visite>> getTutteVisiteCliente(@RequestParam UUID idCliente) {
         List<Visite> visite = visiteService.getTutteVisiteCliente(idCliente);
         return new ResponseEntity<>(visite, HttpStatus.OK);
+    }
+
+    @GetMapping("/stato")
+    public ResponseEntity<List<Visite>> getVisiteByStatoOnAnnuncio(@RequestParam UUID idAnnuncio, @RequestParam String stato) {
+        List<Visite> visite = visiteService.getVisiteByStatoOnAnnuncio(idAnnuncio, stato);
+        return new ResponseEntity<>(visite, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateStatoOfferte(@RequestBody Visite visite, @RequestParam String stato) {
+        visiteService.updateStatoVisite(visite, stato);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
