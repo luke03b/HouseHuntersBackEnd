@@ -67,4 +67,17 @@ public class VisiteService {
             throw new EntityNotFoundException("Offerta non trovata con ID: " + visite.getId());
         }
     }
+
+    public List<Visite> getTutteVisiteConStatoByAgente(String stato, String subAgente){
+        StatoVisita statoFormattato;
+        if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
+            statoFormattato = StatoVisita.RIFIUTATA;
+        } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
+            statoFormattato = StatoVisita.IN_ATTESA;
+        } else {
+            statoFormattato = StatoVisita.CONFERMATA;
+        }
+
+        return visiteRepository.findVisiteByStatoAndAgente(statoFormattato, subAgente);
+    }
 }

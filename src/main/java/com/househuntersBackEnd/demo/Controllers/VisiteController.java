@@ -56,6 +56,12 @@ public class VisiteController {
         return new ResponseEntity<>(visite, HttpStatus.OK);
     }
 
+    @GetMapping("/agente/stato")
+    public ResponseEntity<List<Visite>> getTutteVisiteConStatoByAgente(@RequestParam String stato, @RequestParam String subAgente) {
+        List<Visite> visite = visiteService.getTutteVisiteConStatoByAgente(stato, subAgente);
+        return new ResponseEntity<>(visite, HttpStatus.OK);
+    }
+
     @PutMapping
     public ResponseEntity<?> updateStatoOfferte(@RequestBody Visite visite, @RequestParam String stato) {
         visiteService.updateStatoVisite(visite, stato);
