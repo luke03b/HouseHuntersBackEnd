@@ -1,6 +1,7 @@
 package com.househuntersBackEnd.demo.Services;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
+import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
 import com.househuntersBackEnd.demo.Enumerations.UserType;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
@@ -19,6 +20,10 @@ import java.util.UUID;
 public class OfferteService {
     @Autowired
     private OfferteRepository offerteRepository;
+    @Autowired
+    private AnnuncioService annuncioService;
+
+
     public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException {
         if(offerte.getCliente() != null) {
             boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
@@ -55,6 +60,7 @@ public class OfferteService {
             } else {
                 offertaToUpdate.setStato(StatoOfferta.ACCETTATA);
                 offerteRepository.updateStatoOfferteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getId(), StatoOfferta.RIFIUTATA);
+                annuncioService.updateStatoAnnuncio(offerte.getAnnuncio().getId(), StatoAnnuncio.CONCLUSO);
             }
 
             // Salva e restituisci l'entità aggiornata
@@ -73,7 +79,6 @@ public class OfferteService {
             offertaToUpdate.setStato(StatoOfferta.CONTROPROPOSTA);
             offertaToUpdate.setControProposta(controproposta.get());
 
-            // Salva e restituisci l'entità aggiornata
             return offerteRepository.save(offertaToUpdate);
         } else {
             throw new EntityNotFoundException("Offerta non trovata con ID: " + offerte.getId());

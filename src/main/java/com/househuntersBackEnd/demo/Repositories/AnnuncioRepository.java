@@ -1,8 +1,10 @@
 package com.househuntersBackEnd.demo.Repositories;
 
 import com.househuntersBackEnd.demo.Entities.Annunci;
+import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -44,6 +46,9 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
             @Param("prenotazioni") boolean prenotazioni
     );
 
+    @Modifying
+    @Query("UPDATE Annunci a SET a.stato = :stato WHERE a.id = :idAnnuncio")
+    void updateStatoAnnuncio(@Param("idAnnuncio") UUID idAnnuncio, @Param("stato") StatoAnnuncio stato);
 
 
 }

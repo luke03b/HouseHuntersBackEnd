@@ -2,6 +2,7 @@ package com.househuntersBackEnd.demo.Entities;
 
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
+import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Enumerations.TipoAnnuncio;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -22,6 +23,10 @@ public class Annunci {
     @Column(nullable = false, name = "tipo_annuncio")
     @Enumerated(EnumType.STRING)
     private TipoAnnuncio tipo_annuncio;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "stato")
+    private StatoAnnuncio stato;
 
     @Column(nullable = false, name = "prezzo")
     private double prezzo;

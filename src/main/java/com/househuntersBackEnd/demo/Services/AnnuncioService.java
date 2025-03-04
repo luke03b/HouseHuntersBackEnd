@@ -3,6 +3,7 @@ package com.househuntersBackEnd.demo.Services;
 import com.househuntersBackEnd.demo.AnnunciSpecification;
 import com.househuntersBackEnd.demo.Entities.Annunci;
 import com.househuntersBackEnd.demo.Entities.FiltriRicerca;
+import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Repositories.AnnuncioRepository;
 import com.househuntersBackEnd.demo.Utils.AnnuncioUtils;
 import com.househuntersBackEnd.demo.Utils.GeoUtils;
@@ -79,6 +80,10 @@ public class AnnuncioService {
 
     public List<Annunci> getAnnunciConOffertePrenotazioniByAgenteSub(String sub, boolean offerte, boolean prenotazioni) {
         return annuncioRepository.findAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni);
+    }
+
+    public void updateStatoAnnuncio(UUID idAnnuncio, StatoAnnuncio stato) {
+        annuncioRepository.updateStatoAnnuncio(idAnnuncio, stato);
     }
 
 }
