@@ -20,8 +20,8 @@ public class OfferteService {
     private OfferteRepository offerteRepository;
     public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException {
         if(offerte.getCliente() != null) {
-            boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStato(
-                    offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA
+            boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
+                    offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
             );
             if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
                 throw new OffertaInAttesaEsistenteException("L'utente ha già un'offerta in attesa per questo annuncio.");

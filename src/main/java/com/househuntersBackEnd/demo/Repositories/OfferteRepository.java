@@ -15,11 +15,12 @@ public interface OfferteRepository extends JpaRepository<Offerte, UUID> {
     @Query(value = "SELECT * FROM offerte WHERE id_annuncio = :idAnnuncio", nativeQuery = true)
     List<Offerte> findOfferteByAnnuncioId(@Param("idAnnuncio") UUID idAnnuncio);
 
-    boolean existsByAnnuncioAndClienteAndStato(Annunci annuncio, Users cliente, StatoOfferta stato);
+    boolean existsByAnnuncioAndClienteAndStatoOrStato(Annunci annuncio, Users cliente, StatoOfferta stato, StatoOfferta stato2);
 
     @Query("SELECT o FROM Offerte o WHERE o.cliente.id = :idCliente")
     List<Offerte> findOfferteConAnnuncioByClienteId(@Param("idCliente") UUID idCliente);
 
     List<Offerte> findOfferteByAnnuncioIdAndStato(UUID idAnnuncio, StatoOfferta statoFormattato);
 
+    List<Offerte> Stato(StatoOfferta stato);
 }
