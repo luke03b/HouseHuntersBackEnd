@@ -37,5 +37,15 @@ public class Offerte {
 
     @Column(nullable = true, name = "controProposta")
     private Double controProposta;
+
+    // Dati del cliente esterno per offerte manuali
+    @Column(nullable = true, name = "nomeOfferente")
+    private String nomeOfferente;
+
+    @Column(nullable = true, name = "cognomeOfferente")
+    private String cognomeOfferente;
+
+    @Column(nullable = true, name = "emailOfferente")
+    private String emailOfferente;
 }
 

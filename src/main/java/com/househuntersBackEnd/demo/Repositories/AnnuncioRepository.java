@@ -29,7 +29,7 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
     @Query("""
     SELECT DISTINCT a FROM Annunci a
     LEFT JOIN Offerte o ON a.id = o.annuncio.id
-    LEFT JOIN Visite v ON a.id = v.annuncio.id
+    LEFT JOIN Visite v ON a.id = v.annuncio.id AND v.stato = 'IN_ATTESA'
     WHERE a.agente.sub = :sub
     AND (
         (:offerte = true AND :prenotazioni = true AND o.id IS NOT NULL AND v.id IS NOT NULL) OR

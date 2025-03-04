@@ -19,11 +19,13 @@ public class OfferteService {
     @Autowired
     private OfferteRepository offerteRepository;
     public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException {
-        boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStato(
-                offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA
-        );
-        if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
-            throw new OffertaInAttesaEsistenteException("L'utente ha già un'offerta in attesa per questo annuncio.");
+        if(offerte.getCliente() != null) {
+            boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStato(
+                    offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA
+            );
+            if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
+                throw new OffertaInAttesaEsistenteException("L'utente ha già un'offerta in attesa per questo annuncio.");
+            }
         }
         offerte.setStato(StatoOfferta.IN_ATTESA);
         offerte.setData(LocalDateTime.now());
