@@ -6,6 +6,7 @@ import com.househuntersBackEnd.demo.Enumerations.UserType;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Repositories.OfferteRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class OfferteService {
         return offerteRepository.findOfferteConAnnuncioByClienteId(idCliente);
     }
 
+    @Transactional
     public Offerte updateStatoOfferte(Offerte offerte, String stato) {
         Optional<Offerte> existingOfferta = offerteRepository.findById(offerte.getId());
 
@@ -52,6 +54,7 @@ public class OfferteService {
                 offertaToUpdate.setStato(StatoOfferta.IN_ATTESA);
             } else {
                 offertaToUpdate.setStato(StatoOfferta.ACCETTATA);
+                offerteRepository.updateStatoOfferteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getId(), StatoOfferta.RIFIUTATA);
             }
 
             // Salva e restituisci l'entità aggiornata
@@ -61,7 +64,7 @@ public class OfferteService {
         }
     }
 
-    public Offerte updateStatoOfferteControproposta(Offerte offerte, String stato, Optional<Double> controproposta) {
+    public Offerte updateStatoOfferteControproposta(Offerte offerte, Optional<Double> controproposta) {
         Optional<Offerte> existingOfferta = offerteRepository.findById(offerte.getId());
 
         if (existingOfferta.isPresent()) {

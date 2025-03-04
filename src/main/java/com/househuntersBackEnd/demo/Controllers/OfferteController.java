@@ -33,7 +33,7 @@ public class OfferteController {
     @PutMapping
     public ResponseEntity<?> updateStatoOfferte(@RequestBody Offerte offerte, @RequestParam String stato, @RequestParam(required = false) Optional<Double> controproposta) {
         if(controproposta.isPresent()){
-            offerteService.updateStatoOfferteControproposta(offerte, stato, controproposta);
+            offerteService.updateStatoOfferteControproposta(offerte, controproposta);
         } else {
             offerteService.updateStatoOfferte(offerte, stato);
         }
