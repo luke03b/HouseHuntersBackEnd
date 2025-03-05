@@ -86,4 +86,9 @@ public class AnnuncioService {
         annuncioRepository.updateStatoAnnuncio(idAnnuncio, stato);
     }
 
+    public Annunci getAnnuncioById(UUID idAnnuncio) {
+        List<Annunci> annunci = annuncioRepository.getAnnuncioById(idAnnuncio);
+        return annunci.get(0);
+    }
+
 }

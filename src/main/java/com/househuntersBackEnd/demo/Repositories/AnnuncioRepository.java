@@ -51,4 +51,5 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
     void updateStatoAnnuncio(@Param("idAnnuncio") UUID idAnnuncio, @Param("stato") StatoAnnuncio stato);
 
 
+    List<Annunci> getAnnuncioById(UUID id);
 }
