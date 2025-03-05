@@ -78,8 +78,8 @@ public class AnnuncioService {
         return annuncioRepository.findAnnunciRecentementeVisualizzatiByIdCliente(id);
     }
 
-    public List<Annunci> getAnnunciConOffertePrenotazioniByAgenteSub(String sub, boolean offerte, boolean prenotazioni) {
-        return annuncioRepository.findAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni);
+    public List<Annunci> getAnnunciConOffertePrenotazioniByAgenteSub(String sub, boolean offerte, boolean prenotazioni, boolean disponibili) {
+        return annuncioRepository.findAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni, disponibili);
     }
 
     public void updateStatoAnnuncio(UUID idAnnuncio, StatoAnnuncio stato) {

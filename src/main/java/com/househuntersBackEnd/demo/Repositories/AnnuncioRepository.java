@@ -39,12 +39,15 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
         (:prenotazioni = true AND :offerte = false AND v.id IS NOT NULL) OR
         (:offerte = false AND :prenotazioni = false)
     )
+    AND (:disponibili = false OR a.stato = 'DISPONIBILE')
 """)
     List<Annunci> findAnnunciConOffertePrenotazioniByAgenteSub(
             @Param("sub") String sub,
             @Param("offerte") boolean offerte,
-            @Param("prenotazioni") boolean prenotazioni
+            @Param("prenotazioni") boolean prenotazioni,
+            @Param("disponibili") boolean disponibili
     );
+
 
     @Modifying
     @Query("UPDATE Annunci a SET a.stato = :stato WHERE a.id = :idAnnuncio")

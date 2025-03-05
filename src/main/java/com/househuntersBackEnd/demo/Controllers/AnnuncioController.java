@@ -90,8 +90,8 @@ public class AnnuncioController {
     }
 
     @GetMapping("/agente/offerte-prenotazioni")
-    public ResponseEntity<List<Annunci>> getAnnunciConOffertePrenotazioniByAgenteSub(@RequestParam String sub, @RequestParam boolean offerte, @RequestParam boolean prenotazioni) {
-        List<Annunci> annunci = annuncioService.getAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni);
+    public ResponseEntity<List<Annunci>> getAnnunciConOffertePrenotazioniByAgenteSub(@RequestParam String sub, @RequestParam boolean offerte, @RequestParam boolean prenotazioni, @RequestParam boolean disponibili) {
+        List<Annunci> annunci = annuncioService.getAnnunciConOffertePrenotazioniByAgenteSub(sub, offerte, prenotazioni, disponibili);
         return new ResponseEntity<>(annunci, HttpStatus.OK);
     }
 
