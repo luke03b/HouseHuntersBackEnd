@@ -6,6 +6,7 @@ import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
 import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,4 +20,12 @@ public interface VisiteRepository extends JpaRepository<Visite, UUID> {
     List<Visite> findVisiteByAnnuncioIdAndStato(UUID idAnnuncio, StatoVisita statoFormattato);
     @Query("SELECT v FROM Visite v WHERE v.stato = :stato AND v.annuncio.agente.sub = :subAgente")
     List<Visite> findVisiteByStatoAndAgente(@Param("stato") StatoVisita stato, @Param("subAgente") String subAgente);
+    @Modifying
+    @Query("UPDATE Visite v SET v.stato = :stato WHERE v.annuncio.id = :idAnnuncio AND v.cliente.id <> :idCliente")
+    void updateStatoVisiteEscluse(@Param("idAnnuncio") UUID idAnnuncio, @Param("idCliente") UUID idCliente, @Param("stato") StatoVisita stato);
+    @Modifying
+    @Query("UPDATE Visite v SET v.stato = :stato WHERE v.annuncio.id = :idAnnuncio")
+    void updateStatoVisitePerAnnuncio(@Param("idAnnuncio") UUID idAnnuncio, @Param("stato") StatoVisita stato);
+
+
 }

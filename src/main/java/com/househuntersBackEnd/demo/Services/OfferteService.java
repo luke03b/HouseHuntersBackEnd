@@ -1,11 +1,14 @@
 package com.househuntersBackEnd.demo.Services;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
+import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
+import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
 import com.househuntersBackEnd.demo.Enumerations.UserType;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Repositories.OfferteRepository;
+import com.househuntersBackEnd.demo.Repositories.VisiteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class OfferteService {
     private OfferteRepository offerteRepository;
     @Autowired
     private AnnuncioService annuncioService;
+    @Autowired
+    private VisiteRepository visiteRepository;
 
 
     public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException {
@@ -60,6 +65,11 @@ public class OfferteService {
             } else {
                 offertaToUpdate.setStato(StatoOfferta.ACCETTATA);
                 offerteRepository.updateStatoOfferteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getId(), StatoOfferta.RIFIUTATA);
+                if(offertaToUpdate.getCliente() != null) {
+                    visiteRepository.updateStatoVisiteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getCliente().getId(), StatoVisita.RIFIUTATA);
+                } else {
+                    visiteRepository.updateStatoVisitePerAnnuncio(offertaToUpdate.getAnnuncio().getId(), StatoVisita.RIFIUTATA);
+                }
                 annuncioService.updateStatoAnnuncio(offerte.getAnnuncio().getId(), StatoAnnuncio.CONCLUSO);
             }
 
