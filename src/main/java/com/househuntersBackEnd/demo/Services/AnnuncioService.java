@@ -53,6 +53,7 @@ public class AnnuncioService {
         if (filtriRicerca.getClasseEnergetica() != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(filtriRicerca.getClasseEnergetica()));
         if (filtriRicerca.getPiano() != null) spec = spec.and(AnnunciSpecification.hasPiano(filtriRicerca.getPiano()));
         if (filtriRicerca.getTipo_annuncio() != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(filtriRicerca.getTipo_annuncio()));
+        spec = spec.and(AnnunciSpecification.hasStatoAnnuncio(StatoAnnuncio.DISPONIBILE.toString()));
 
 
 

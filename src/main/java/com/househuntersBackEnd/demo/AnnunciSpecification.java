@@ -14,6 +14,11 @@ public class AnnunciSpecification {
                 criteriaBuilder.equal(root.get("tipo_annuncio"), tipo_annuncio);
     }
 
+    public static Specification<Annunci> hasStatoAnnuncio(String stato) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("stato"), stato);
+    }
+
     public static Specification<Annunci> hasPrezzoMinimo(double prezzoMinimo) {
         return ((root, query, criteriaBuilder) ->
                 criteriaBuilder.greaterThanOrEqualTo(root.get("prezzo"), prezzoMinimo));
