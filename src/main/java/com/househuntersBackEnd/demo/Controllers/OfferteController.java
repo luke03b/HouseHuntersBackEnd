@@ -25,11 +25,11 @@ public class OfferteController {
             newOfferta = offerteService.createOfferte(offerte);
         } catch (OffertaInAttesaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Esiste già un'offerta in attesa da parte del cliente per questo annuncio.");
+            errorResponse.put("error", "Esiste gia' un'offerta in attesa da parte del cliente per questo annuncio.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (OffertaAccettataEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Esiste già un'offerta accettata per questo annuncio.");
+            errorResponse.put("error", "Esiste gia' un'offerta accettata per questo annuncio.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
@@ -42,15 +42,7 @@ public class OfferteController {
         } else {
             offerteService.updateStatoOfferte(offerte, stato);
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @ExceptionHandler(OffertaInAttesaEsistenteException.class)
-    public ResponseEntity<Map<String, String>> handleOffertaInAttesaException(OffertaInAttesaEsistenteException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @GetMapping

@@ -27,25 +27,18 @@ public class VisiteController {
            newVisita = visiteService.createVisite(visite);
         } catch (VisitaInAttesaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Esiste già una visita in attesa per questo annuncio.");
+            errorResponse.put("error", "Esiste gia' una visita in attesa chiesta dal cliente per questo annuncio.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (VisitaInAttesaPerFasciaOrariaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria scelta");
+            errorResponse.put("error", "Esiste gia' una visita in attesa o accettata per questo annuncio nella fascia oraria scelta");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (OffertaAccettataEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
+            errorResponse.put("error", "esiste gia' un'offerta accettata per questo annuncio, quindi non e' possibile prenotare visite");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
-    }
-
-    @ExceptionHandler(VisitaInAttesaEsistenteException.class)
-    public ResponseEntity<Map<String, String>> handleVisitaInAttesaException(VisitaInAttesaEsistenteException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @GetMapping
