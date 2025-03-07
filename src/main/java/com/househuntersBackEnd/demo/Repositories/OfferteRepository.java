@@ -26,5 +26,13 @@ public interface OfferteRepository extends JpaRepository<Offerte, UUID> {
     @Modifying
     @Query("UPDATE Offerte o SET o.stato = :stato WHERE o.annuncio.id = :idAnnuncio AND o.id <> :idOfferta")
     void updateStatoOfferteEscluse(@Param("idAnnuncio") UUID idAnnuncio, @Param("idOfferta") UUID idOfferta, @Param("stato") StatoOfferta stato);
-    ;
+
+    @Modifying
+    @Query("UPDATE Offerte o SET o.cliente = NULL, o.nomeOfferente = :nome, o.cognomeOfferente = :cognome, o.emailOfferente = :email WHERE o.cliente.id = :userId AND o.stato = 'ACCETTATA'")
+    void updateAcceptedOffers(@Param("userId") UUID userId, @Param("nome") String nome, @Param("cognome") String cognome, @Param("email") String email);
+
+    @Modifying
+    @Query("DELETE FROM Offerte o WHERE o.cliente.id = :userId AND o.stato <> 'ACCETTATA'")
+    void deleteNotAcceptedOffers(@Param("userId") UUID userId);
+
 }

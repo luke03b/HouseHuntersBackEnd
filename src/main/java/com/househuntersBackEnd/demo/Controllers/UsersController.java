@@ -28,7 +28,7 @@ public class UsersController {
 
     @DeleteMapping
     public ResponseEntity<HttpStatus> deleteUserBySub(@RequestParam String sub) {
-        usersService.deleteUserBySub(sub);
+        usersService.deleteUser(sub);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -27,5 +27,8 @@ public interface VisiteRepository extends JpaRepository<Visite, UUID> {
     @Query("UPDATE Visite v SET v.stato = :stato WHERE v.annuncio.id = :idAnnuncio")
     void updateStatoVisitePerAnnuncio(@Param("idAnnuncio") UUID idAnnuncio, @Param("stato") StatoVisita stato);
 
+    @Modifying
+    @Query("DELETE FROM Visite v WHERE v.cliente.id = :userId")
+    void deleteByClienteId(@Param("userId") UUID userId);
 
 }
