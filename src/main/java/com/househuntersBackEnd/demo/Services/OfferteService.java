@@ -6,6 +6,7 @@ import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
 import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
 import com.househuntersBackEnd.demo.Enumerations.UserType;
+import com.househuntersBackEnd.demo.Exceptions.OffertaAccettataEsistenteException;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Repositories.OfferteRepository;
 import com.househuntersBackEnd.demo.Repositories.VisiteRepository;
@@ -29,11 +30,18 @@ public class OfferteService {
     private VisiteRepository visiteRepository;
 
 
-    public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException {
+    public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException, OffertaAccettataEsistenteException {
         if(offerte.getCliente() != null) {
             boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
                     offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
             );
+
+            boolean esisteAccettata = offerteRepository.existsByAnnuncioAndStato(offerte.getAnnuncio(), StatoOfferta.ACCETTATA);
+
+            if(esisteAccettata){
+                throw new OffertaAccettataEsistenteException("Esiste già un'offerta accettata per l'annuncio");
+            }
+
             if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
                 throw new OffertaInAttesaEsistenteException("L'utente ha già un'offerta in attesa per questo annuncio.");
             }

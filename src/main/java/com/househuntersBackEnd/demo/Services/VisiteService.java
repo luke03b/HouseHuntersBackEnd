@@ -2,8 +2,12 @@ package com.househuntersBackEnd.demo.Services;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Entities.Visite;
+import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
 import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
+import com.househuntersBackEnd.demo.Exceptions.OffertaAccettataEsistenteException;
 import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaEsistenteException;
+import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaPerFasciaOrariaEsistenteException;
+import com.househuntersBackEnd.demo.Repositories.OfferteRepository;
 import com.househuntersBackEnd.demo.Repositories.VisiteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +21,32 @@ import java.util.UUID;
 public class VisiteService {
     @Autowired
     private VisiteRepository visiteRepository;
-    public Visite createVisite(Visite visite) throws VisitaInAttesaEsistenteException{
-        boolean esisteInAttesa = visiteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
-                visite.getAnnuncio(), visite.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA
+    private OfferteService offerteService;
+    @Autowired
+    private OfferteRepository offerteRepository;
+
+    public Visite createVisite(Visite visite) throws VisitaInAttesaEsistenteException, VisitaInAttesaPerFasciaOrariaEsistenteException, OffertaAccettataEsistenteException {
+        boolean esisteInAttesaOAccettataCliente = visiteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
+                 visite.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visite.getAnnuncio()
         );
-        if (esisteInAttesa) {
-            throw new VisitaInAttesaEsistenteException("L'utente ha già una visita in attesa per questo annuncio.");
+        if (esisteInAttesaOAccettataCliente) {
+            throw new VisitaInAttesaEsistenteException("L'utente ha già una visita in attesa o confermata per questo annuncio.");
         }
+
+        boolean esisteInAttesaOAccettataFasciaOraria = visiteRepository.existsByAnnuncioAndStatoOrStatoAndDataAndOrarioInizio(
+                visite.getAnnuncio(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visite.getData(), visite.getOrarioInizio()
+        );
+
+        if(esisteInAttesaOAccettataFasciaOraria) {
+            throw new VisitaInAttesaPerFasciaOrariaEsistenteException("esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria indicata.");
+        }
+
+        boolean esisteOffertaAccettataSuAnnuncio = offerteRepository.existsByAnnuncioAndStato(visite.getAnnuncio(), StatoOfferta.ACCETTATA);
+
+        if(esisteOffertaAccettataSuAnnuncio) {
+            throw new OffertaAccettataEsistenteException("esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
+        }
+
         visite.setOrarioFine(visite.getOrarioInizio().plusHours(1));
         visite.setStato(StatoVisita.IN_ATTESA);
         return visiteRepository.save(visite);

@@ -2,7 +2,9 @@ package com.househuntersBackEnd.demo.Controllers;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Entities.Visite;
+import com.househuntersBackEnd.demo.Exceptions.OffertaAccettataEsistenteException;
 import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaEsistenteException;
+import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaPerFasciaOrariaEsistenteException;
 import com.househuntersBackEnd.demo.Services.VisiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,14 @@ public class VisiteController {
         } catch (VisitaInAttesaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Esiste già una visita in attesa per questo annuncio.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (VisitaInAttesaPerFasciaOrariaEsistenteException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria scelta");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (OffertaAccettataEsistenteException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         return new ResponseEntity<>(newVisita, HttpStatus.CREATED);

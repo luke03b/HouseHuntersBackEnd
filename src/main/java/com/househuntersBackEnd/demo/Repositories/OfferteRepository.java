@@ -35,4 +35,5 @@ public interface OfferteRepository extends JpaRepository<Offerte, UUID> {
     @Query("DELETE FROM Offerte o WHERE o.cliente.id = :userId AND o.stato <> 'ACCETTATA'")
     void deleteNotAcceptedOffers(@Param("userId") UUID userId);
 
+    boolean existsByAnnuncioAndStato(Annunci annuncio, StatoOfferta stato);
 }

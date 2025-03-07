@@ -1,6 +1,7 @@
 package com.househuntersBackEnd.demo.Controllers;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
+import com.househuntersBackEnd.demo.Exceptions.OffertaAccettataEsistenteException;
 import com.househuntersBackEnd.demo.Exceptions.OffertaInAttesaEsistenteException;
 import com.househuntersBackEnd.demo.Services.OfferteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,11 @@ public class OfferteController {
             newOfferta = offerteService.createOfferte(offerte);
         } catch (OffertaInAttesaEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Esiste già un'offerta in attesa per questo annuncio.");
+            errorResponse.put("error", "Esiste già un'offerta in attesa da parte del cliente per questo annuncio.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (OffertaAccettataEsistenteException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Esiste già un'offerta accettata per questo annuncio.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
