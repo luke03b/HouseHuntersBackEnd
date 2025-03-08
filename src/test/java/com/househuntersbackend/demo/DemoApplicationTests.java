@@ -8,6 +8,7 @@ class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//vuoto perché boh sonarwube mi ha detto di commentarlo così non dà errori
 	}
 
 }

@@ -67,7 +67,7 @@ public class VisiteController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateStatoOfferte(@RequestBody Visite visite, @RequestParam String stato) {
+    public ResponseEntity<HttpStatus> updateStatoOfferte(@RequestBody Visite visite, @RequestParam String stato) {
         visiteService.updateStatoVisite(visite, stato);
         return new ResponseEntity<>(HttpStatus.OK);
     }
