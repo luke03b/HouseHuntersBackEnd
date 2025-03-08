@@ -9,8 +9,11 @@ import java.util.List;
 
 @Service
 public class AgenziaImmobiliareService {
-    @Autowired
-    private AgenziaImmobiliareRepository agenziaImmobiliareRepository;
+    private final AgenziaImmobiliareRepository agenziaImmobiliareRepository;
+
+    public AgenziaImmobiliareService(AgenziaImmobiliareRepository agenziaImmobiliareRepository) {
+        this.agenziaImmobiliareRepository = agenziaImmobiliareRepository;
+    }
 
     public AgenziaImmobiliare createAgenziaImmobiliare(AgenziaImmobiliare agenziaImmobiliare) {
         if (agenziaImmobiliare.getNome() == null || agenziaImmobiliare.getPartitaiva() == null) {

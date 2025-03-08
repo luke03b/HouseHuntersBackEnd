@@ -10,8 +10,12 @@ import java.time.LocalDateTime;
 @Service
 public class CronologiaService {
 
-    @Autowired
-    private CronologiaRepository cronologiaRepository;
+    private final CronologiaRepository cronologiaRepository;
+
+    public CronologiaService(CronologiaRepository cronologiaRepository) {
+        this.cronologiaRepository = cronologiaRepository;
+    }
+
     public Cronologia createCronologia(Cronologia cronologia) {
         cronologia.setDataVisualizzazione(LocalDateTime.now());
         return cronologiaRepository.save(cronologia);

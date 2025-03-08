@@ -4,6 +4,8 @@ public class GeoUtils {
     // Costante: 1° di latitudine = ~111.32 km ovunque sulla Terra
     private static final double LATITUDE_KM = 111.32;
 
+    private GeoUtils() {}
+
     /**
      * Converte una distanza in km nei corrispondenti gradi di latitudine e longitudine.
      *

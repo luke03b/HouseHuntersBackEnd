@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/immagini")
 public class ImmaginiController {
 
-    @Autowired
-    private ImmaginiService immaginiService;
+    private final ImmaginiService immaginiService;
+
+    public ImmaginiController(ImmaginiService immaginiService) {
+        this.immaginiService = immaginiService;
+    }
 
     @PostMapping
     public ResponseEntity<Immagini> create(@RequestBody Immagini immagini) {

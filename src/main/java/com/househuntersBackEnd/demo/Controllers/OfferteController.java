@@ -15,8 +15,11 @@ import java.util.*;
 @RequestMapping("/api/offerte")
 public class OfferteController {
 
-    @Autowired
-    private OfferteService offerteService;
+    private final OfferteService offerteService;
+
+    public OfferteController(OfferteService offerteService) {
+        this.offerteService = offerteService;
+    }
 
     @PostMapping
     public ResponseEntity<?> createOfferte(@RequestBody Offerte offerte) {

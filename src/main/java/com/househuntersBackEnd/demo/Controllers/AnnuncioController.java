@@ -17,8 +17,11 @@ import java.util.UUID;
 @RequestMapping("/api/annunci")
 public class AnnuncioController {
 
-    @Autowired
-    private AnnuncioService annuncioService;
+    private final AnnuncioService annuncioService;
+
+    public AnnuncioController(AnnuncioService annuncioService) {
+        this.annuncioService = annuncioService;
+    }
 
     @PostMapping
     public ResponseEntity<Annunci> createAnnuncio(@RequestBody Annunci annuncio) {

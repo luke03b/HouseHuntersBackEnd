@@ -1,13 +1,13 @@
 package com.househuntersBackEnd.demo;
 
 import com.househuntersBackEnd.demo.Entities.Annunci;
-import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Enumerations.ClasseEnergetica;
 import com.househuntersBackEnd.demo.Enumerations.Piano;
-import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 public class AnnunciSpecification {
+
+    private AnnunciSpecification() {}
 
     public static Specification<Annunci> hasTipoAnnuncio(String tipo_annuncio) {
         return (root, query, criteriaBuilder) ->

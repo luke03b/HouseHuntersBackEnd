@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/cronologia")
 public class CronologiaController {
 
-    @Autowired
-    private CronologiaService cronologiaService;
+    private final CronologiaService cronologiaService;
+
+    public CronologiaController(CronologiaService cronologiaService) {
+        this.cronologiaService = cronologiaService;
+    }
 
     @PostMapping
     public ResponseEntity<Cronologia> createCronologia(@RequestBody Cronologia cronologia) {

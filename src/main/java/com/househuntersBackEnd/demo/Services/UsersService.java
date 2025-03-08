@@ -8,21 +8,22 @@ import com.househuntersBackEnd.demo.Repositories.UsersRepository;
 import com.househuntersBackEnd.demo.Repositories.VisiteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class UsersService {
-    @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private OfferteRepository offerteRepository;
-    @Autowired
-    private VisiteRepository visiteRepository;
-    @Autowired
-    private CronologiaRepository cronologiaRepository;
+    private final UsersRepository usersRepository;
+    private final OfferteRepository offerteRepository;
+    private final VisiteRepository visiteRepository;
+    private final CronologiaRepository cronologiaRepository;
+
+    public UsersService(UsersRepository usersRepository, OfferteRepository offerteRepository, VisiteRepository visiteRepository, CronologiaRepository cronologiaRepository) {
+        this.usersRepository = usersRepository;
+        this.offerteRepository = offerteRepository;
+        this.visiteRepository = visiteRepository;
+        this.cronologiaRepository = cronologiaRepository;
+    }
+
     public Users createUser(Users user) {
         return usersRepository.save(user);
     }

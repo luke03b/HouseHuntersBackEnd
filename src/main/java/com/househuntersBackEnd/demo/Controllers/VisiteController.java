@@ -1,6 +1,5 @@
 package com.househuntersBackEnd.demo.Controllers;
 
-import com.househuntersBackEnd.demo.Entities.Offerte;
 import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Exceptions.OffertaAccettataEsistenteException;
 import com.househuntersBackEnd.demo.Exceptions.VisitaInAttesaEsistenteException;
@@ -17,8 +16,11 @@ import java.util.*;
 @RequestMapping("/api/visite")
 public class VisiteController {
 
-    @Autowired
-    private VisiteService visiteService;
+    private final VisiteService visiteService;
+
+    public VisiteController(VisiteService visiteService) {
+        this.visiteService = visiteService;
+    }
 
     @PostMapping
     public ResponseEntity<?> createVisite(@RequestBody Visite visite) {

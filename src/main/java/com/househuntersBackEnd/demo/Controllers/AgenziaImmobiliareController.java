@@ -13,8 +13,11 @@ import java.util.List;
 @RequestMapping("/api/agenziaimmobiliare")
 public class AgenziaImmobiliareController {
 
-    @Autowired
-    private AgenziaImmobiliareService agenziaImmobiliareService;
+    private final AgenziaImmobiliareService agenziaImmobiliareService;
+
+    public AgenziaImmobiliareController(AgenziaImmobiliareService agenziaImmobiliareService) {
+        this.agenziaImmobiliareService = agenziaImmobiliareService;
+    }
 
     @PostMapping
     public ResponseEntity<AgenziaImmobiliare> createAgenziaImmobiliare(@RequestBody AgenziaImmobiliare agenzia) {

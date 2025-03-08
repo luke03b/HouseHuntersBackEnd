@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ImmaginiService {
-    @Autowired
-    private ImmaginiRepository immaginiRepository;
+    private final ImmaginiRepository immaginiRepository;
+
+    public ImmaginiService(ImmaginiRepository immaginiRepository) {
+        this.immaginiRepository = immaginiRepository;
+    }
 
     public Immagini createImmagini(Immagini immagini) {
         return immaginiRepository.save(immagini);

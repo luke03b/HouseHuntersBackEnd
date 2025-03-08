@@ -1,7 +1,6 @@
 package com.househuntersBackEnd.demo.Services;
 
 import com.househuntersBackEnd.demo.Entities.Offerte;
-import com.househuntersBackEnd.demo.Entities.Visite;
 import com.househuntersBackEnd.demo.Enumerations.StatoAnnuncio;
 import com.househuntersBackEnd.demo.Enumerations.StatoOfferta;
 import com.househuntersBackEnd.demo.Enumerations.StatoVisita;
@@ -22,12 +21,15 @@ import java.util.UUID;
 
 @Service
 public class OfferteService {
-    @Autowired
-    private OfferteRepository offerteRepository;
-    @Autowired
-    private AnnuncioService annuncioService;
-    @Autowired
-    private VisiteRepository visiteRepository;
+    private final OfferteRepository offerteRepository;
+    private final AnnuncioService annuncioService;
+    private final VisiteRepository visiteRepository;
+
+    public OfferteService(OfferteRepository offerteRepository, AnnuncioService annuncioService, VisiteRepository visiteRepository) {
+        this.offerteRepository = offerteRepository;
+        this.annuncioService = annuncioService;
+        this.visiteRepository = visiteRepository;
+    }
 
 
     public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException, OffertaAccettataEsistenteException {

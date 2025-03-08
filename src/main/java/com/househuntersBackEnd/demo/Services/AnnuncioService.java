@@ -18,9 +18,12 @@ import java.util.UUID;
 @Service
 public class AnnuncioService {
 
-    @Autowired
-    private AnnuncioRepository annuncioRepository;
+    private final AnnuncioRepository annuncioRepository;
     private final AnnuncioUtils annuncioUtils = new AnnuncioUtils();
+
+    public AnnuncioService(AnnuncioRepository annuncioRepository) {
+        this.annuncioRepository = annuncioRepository;
+    }
 
 
     public Annunci createAnnuncio(Annunci annuncio) {
