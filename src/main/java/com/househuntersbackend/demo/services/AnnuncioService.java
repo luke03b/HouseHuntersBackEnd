@@ -26,7 +26,7 @@ public class AnnuncioService {
 
 
     public Annunci createAnnuncio(Annunci annuncio) {
-        annuncio.setData_creazione(LocalDateTime.now());
+        annuncio.setDataCreazione(LocalDateTime.now());
 
         annuncioUtils.setVicinanze(annuncio);
 
@@ -49,12 +49,12 @@ public class AnnuncioService {
         if (filtriRicerca.getArredo() != null) spec = spec.and(AnnunciSpecification.hasArredo(filtriRicerca.getArredo()));
         if (filtriRicerca.getBalcone() != null) spec = spec.and(AnnunciSpecification.hasBalcone(filtriRicerca.getBalcone()));
         if (filtriRicerca.getGiardino() != null) spec = spec.and(AnnunciSpecification.hasGiardino(filtriRicerca.getGiardino()));
-        if (filtriRicerca.getVicino_scuole() != null) spec = spec.and(AnnunciSpecification.hasVicinoScuole(filtriRicerca.getVicino_scuole()));
-        if (filtriRicerca.getVicino_parchi() != null) spec = spec.and(AnnunciSpecification.hasVicinoParchi(filtriRicerca.getVicino_parchi()));
-        if (filtriRicerca.getVicino_trasporti() != null) spec = spec.and(AnnunciSpecification.hasVicinoTrasporti(filtriRicerca.getVicino_trasporti()));
+        if (filtriRicerca.getVicinoScuole() != null) spec = spec.and(AnnunciSpecification.hasVicinoScuole(filtriRicerca.getVicinoScuole()));
+        if (filtriRicerca.getVicinoParchi() != null) spec = spec.and(AnnunciSpecification.hasVicinoParchi(filtriRicerca.getVicinoParchi()));
+        if (filtriRicerca.getVicinoTrasporti() != null) spec = spec.and(AnnunciSpecification.hasVicinoTrasporti(filtriRicerca.getVicinoTrasporti()));
         if (filtriRicerca.getClasseEnergetica() != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(filtriRicerca.getClasseEnergetica()));
         if (filtriRicerca.getPiano() != null) spec = spec.and(AnnunciSpecification.hasPiano(filtriRicerca.getPiano()));
-        if (filtriRicerca.getTipo_annuncio() != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(filtriRicerca.getTipo_annuncio()));
+        if (filtriRicerca.getTipoAnnuncio() != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(filtriRicerca.getTipoAnnuncio()));
         spec = spec.and(AnnunciSpecification.hasStatoAnnuncio(StatoAnnuncio.DISPONIBILE.toString()));
 
 

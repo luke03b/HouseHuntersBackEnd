@@ -9,9 +9,9 @@ public class AnnunciSpecification {
 
     private AnnunciSpecification() {}
 
-    public static Specification<Annunci> hasTipoAnnuncio(String tipo_annuncio) {
+    public static Specification<Annunci> hasTipoAnnuncio(String tipoAnnuncio) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("tipo_annuncio"), tipo_annuncio);
+                criteriaBuilder.equal(root.get("tipoAnnuncio"), tipoAnnuncio);
     }
 
     public static Specification<Annunci> hasStatoAnnuncio(String stato) {
@@ -79,24 +79,24 @@ public class AnnunciSpecification {
                 criteriaBuilder.equal(root.get("giardino"), giardino);
     }
 
-    public static Specification<Annunci> hasVicinoScuole(boolean vicino_scuole) {
+    public static Specification<Annunci> hasVicinoScuole(boolean vicinoScuole) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("vicino_scuole"), vicino_scuole);
+                criteriaBuilder.equal(root.get("vicinoScuole"), vicinoScuole);
     }
 
-    public static Specification<Annunci> hasVicinoParchi(boolean vicino_parchi) {
+    public static Specification<Annunci> hasVicinoParchi(boolean vicinoParchi) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("vicino_parchi"), vicino_parchi);
+                criteriaBuilder.equal(root.get("vicinoParchi"), vicinoParchi);
     }
 
-    public static Specification<Annunci> hasVicinoTrasporti(boolean vicino_trasporti) {
+    public static Specification<Annunci> hasVicinoTrasporti(boolean vicinoTrasporti) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("vicino_trasporti"), vicino_trasporti);
+                criteriaBuilder.equal(root.get("vicinoTrasporti"), vicinoTrasporti);
     }
 
     public static Specification<Annunci> hasClasseEnergetica(ClasseEnergetica classeEnergetica) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("classe_energetica"), classeEnergetica);
+                criteriaBuilder.equal(root.get("classeEnergetica"), classeEnergetica);
     }
 
     public static Specification<Annunci> hasPiano(Piano piano) {

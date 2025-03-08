@@ -42,19 +42,19 @@ public class AnnuncioController {
             @RequestParam(required = false) Boolean arredo,
             @RequestParam(required = false) Boolean balcone,
             @RequestParam(required = false) Boolean giardino,
-            @RequestParam(required = false) Boolean vicino_scuole,
-            @RequestParam(required = false) Boolean vicino_parchi,
-            @RequestParam(required = false) Boolean vicino_trasporti,
+            @RequestParam(required = false) Boolean vicinoScuole,
+            @RequestParam(required = false) Boolean vicinoParchi,
+            @RequestParam(required = false) Boolean vicinoTrasporti,
             @RequestParam(required = false) ClasseEnergetica classeEnergetica,
             @RequestParam(required = false) Piano piano,
             @RequestParam(required = false) String indirizzo,
             @RequestParam(required = false) Double latitudine,
             @RequestParam(required = false) Double longitudine,
             @RequestParam(required = false) Double raggioKm,
-            @RequestParam(required = false) String tipo_annuncio
+            @RequestParam(required = false) String tipoAnnuncio
     ) {
         FiltriRicerca filtriRicerca = new FiltriRicerca(
-                tipo_annuncio,
+                tipoAnnuncio,
                 latitudine,
                 longitudine,
                 raggioKm,
@@ -70,9 +70,9 @@ public class AnnuncioController {
                 arredo,
                 balcone,
                 giardino,
-                vicino_scuole,
-                vicino_parchi,
-                vicino_trasporti,
+                vicinoScuole,
+                vicinoParchi,
+                vicinoTrasporti,
                 classeEnergetica,
                 piano
         );

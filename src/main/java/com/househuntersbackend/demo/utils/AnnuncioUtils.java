@@ -81,8 +81,8 @@ public class AnnuncioUtils {
             e.printStackTrace(); // Gestisci l'eccezione
             // Puoi anche loggare l'errore o intraprendere altre azioni
         }
-        annuncio.setVicino_scuole(vicinoScuole);
-        annuncio.setVicino_parchi(vicinoParchi);
-        annuncio.setVicino_trasporti(vicinoTrasporti);
+        annuncio.setVicinoScuole(vicinoScuole);
+        annuncio.setVicinoParchi(vicinoParchi);
+        annuncio.setVicinoTrasporti(vicinoTrasporti);
     }
 }

@@ -4,30 +4,30 @@ import com.househuntersbackend.demo.enumerations.ClasseEnergetica;
 import com.househuntersbackend.demo.enumerations.Piano;
 
 public class FiltriRicerca {
-    private String tipo_annuncio;
-    private Double latitudine;
-    private Double longitudine;
-    private Double raggioKm;
-    private Double prezzoMinimo;
-    private Double prezzoMassimo;
-    private Integer superficieMinima;
-    private Integer superficieMassima;
-    private Integer numStanzeMinime;
-    private Integer numStanzeMassime;
-    private Boolean garage;
-    private Boolean ascensore;
-    private Boolean piscina;
-    private Boolean arredo;
-    private Boolean balcone;
-    private Boolean giardino;
-    private Boolean vicino_scuole;
-    private Boolean vicino_parchi;
-    private Boolean vicino_trasporti;
-    private ClasseEnergetica classeEnergetica;
-    private Piano piano;
+    private final String tipoAnnuncio;
+    private final Double latitudine;
+    private final Double longitudine;
+    private final Double raggioKm;
+    private final Double prezzoMinimo;
+    private final Double prezzoMassimo;
+    private final Integer superficieMinima;
+    private final Integer superficieMassima;
+    private final Integer numStanzeMinime;
+    private final Integer numStanzeMassime;
+    private final Boolean garage;
+    private final Boolean ascensore;
+    private final Boolean piscina;
+    private final Boolean arredo;
+    private final Boolean balcone;
+    private final Boolean giardino;
+    private final Boolean vicinoScuole;
+    private final Boolean vicinoParchi;
+    private final Boolean vicinoTrasporti;
+    private final ClasseEnergetica classeEnergetica;
+    private final Piano piano;
 
     public FiltriRicerca(
-        String tipo_annuncio,
+        String tipoAnnuncio,
         Double latitudine,
         Double longitudine,
         Double raggioKm,
@@ -43,13 +43,13 @@ public class FiltriRicerca {
         Boolean arredo,
         Boolean balcone,
         Boolean giardino,
-        Boolean vicino_scuole,
-        Boolean vicino_parchi,
-        Boolean vicino_trasporti,
+        Boolean vicinoScuole,
+        Boolean vicinoParchi,
+        Boolean vicinoTrasporti,
         ClasseEnergetica classeEnergetica,
         Piano piano
     ) {
-        this.tipo_annuncio = tipo_annuncio;
+        this.tipoAnnuncio = tipoAnnuncio;
         this.latitudine = latitudine;
         this.longitudine = longitudine;
         this.raggioKm = raggioKm;
@@ -65,15 +65,15 @@ public class FiltriRicerca {
         this.giardino = giardino;
         this.piscina = piscina;
         this.balcone = balcone;
-        this.vicino_scuole = vicino_scuole;
-        this.vicino_parchi = vicino_parchi;
-        this.vicino_trasporti = vicino_trasporti;
+        this.vicinoScuole = vicinoScuole;
+        this.vicinoParchi = vicinoParchi;
+        this.vicinoTrasporti = vicinoTrasporti;
         this.piano = piano;
         this.classeEnergetica = classeEnergetica;
     }
 
-    public String getTipo_annuncio() {
-        return tipo_annuncio;
+    public String getTipoAnnuncio() {
+        return tipoAnnuncio;
     }
 
     public Double getLatitudine() {
@@ -136,16 +136,16 @@ public class FiltriRicerca {
         return giardino;
     }
 
-    public Boolean getVicino_scuole() {
-        return vicino_scuole;
+    public Boolean getVicinoScuole() {
+        return vicinoScuole;
     }
 
-    public Boolean getVicino_parchi() {
-        return vicino_parchi;
+    public Boolean getVicinoParchi() {
+        return vicinoParchi;
     }
 
-    public Boolean getVicino_trasporti() {
-        return vicino_trasporti;
+    public Boolean getVicinoTrasporti() {
+        return vicinoTrasporti;
     }
 
     public ClasseEnergetica getClasseEnergetica() {

@@ -22,7 +22,7 @@ public class Annunci {
 
     @Column(nullable = false, name = "tipo_annuncio")
     @Enumerated(EnumType.STRING)
-    private TipoAnnuncio tipo_annuncio;
+    private TipoAnnuncio tipoAnnuncio;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "stato")
@@ -56,27 +56,27 @@ public class Annunci {
     private boolean giardino;
 
     @Column(nullable = false, name = "vicino_scuole")
-    private boolean vicino_scuole;
+    private boolean vicinoScuole;
 
     @Column(nullable = false, name = "vicino_parchi")
-    private boolean vicino_parchi;
+    private boolean vicinoParchi;
 
     @Column(nullable = false, name = "vicino_trasporti")
-    private boolean vicino_trasporti;
+    private boolean vicinoTrasporti;
 
     @Column(nullable = false, name = "classe_energetica")
     @Enumerated(EnumType.STRING)
-    private ClasseEnergetica classe_energetica;
+    private ClasseEnergetica classeEnergetica;
 
     @Column(nullable = false, name = "piano")
     @Enumerated(EnumType.STRING)
     private Piano piano;
 
     @Column(name = "numeropiano")
-    private Integer numero_piano;
+    private Integer numeroPiano;
 
     @Column(nullable = false, name = "data_creazione")
-    private java.time.LocalDateTime data_creazione;
+    private java.time.LocalDateTime dataCreazione;
 
     @ManyToOne
     @JoinColumn(name = "idAgente")
