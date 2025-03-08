@@ -37,24 +37,12 @@ public class AnnuncioService {
     public List<Annunci> getAnnunci(FiltriRicerca filtriRicerca) {
         Specification<Annunci> spec = Specification.where(null);
 
-        if (filtriRicerca.getPrezzoMinimo() != null) spec = spec.and(AnnunciSpecification.hasPrezzoMinimo(filtriRicerca.getPrezzoMinimo()));
-        if (filtriRicerca.getPrezzoMassimo() != null) spec = spec.and(AnnunciSpecification.hasPrezzoMassimo(filtriRicerca.getPrezzoMassimo()));
-        if (filtriRicerca.getSuperficieMinima() != null) spec = spec.and(AnnunciSpecification.hasSuperficieMinima(filtriRicerca.getSuperficieMinima()));
-        if (filtriRicerca.getSuperficieMassima() != null) spec = spec.and(AnnunciSpecification.hasSuperficieMassima(filtriRicerca.getSuperficieMassima()));
-        if (filtriRicerca.getNumStanzeMinime() != null) spec = spec.and(AnnunciSpecification.hasNumeroStanzeMinimo(filtriRicerca.getNumStanzeMinime()));
-        if (filtriRicerca.getNumStanzeMassime() != null) spec = spec.and(AnnunciSpecification.hasNumeroStanzeMassimo(filtriRicerca.getNumStanzeMassime()));
-        if (filtriRicerca.getGarage() != null) spec = spec.and(AnnunciSpecification.hasGarage(filtriRicerca.getGarage()));
-        if (filtriRicerca.getAscensore() != null) spec = spec.and(AnnunciSpecification.hasAscensore(filtriRicerca.getAscensore()));
-        if (filtriRicerca.getPiscina() != null) spec = spec.and(AnnunciSpecification.hasPiscina(filtriRicerca.getPiscina()));
-        if (filtriRicerca.getArredo() != null) spec = spec.and(AnnunciSpecification.hasArredo(filtriRicerca.getArredo()));
-        if (filtriRicerca.getBalcone() != null) spec = spec.and(AnnunciSpecification.hasBalcone(filtriRicerca.getBalcone()));
-        if (filtriRicerca.getGiardino() != null) spec = spec.and(AnnunciSpecification.hasGiardino(filtriRicerca.getGiardino()));
-        if (filtriRicerca.getVicinoScuole() != null) spec = spec.and(AnnunciSpecification.hasVicinoScuole(filtriRicerca.getVicinoScuole()));
-        if (filtriRicerca.getVicinoParchi() != null) spec = spec.and(AnnunciSpecification.hasVicinoParchi(filtriRicerca.getVicinoParchi()));
-        if (filtriRicerca.getVicinoTrasporti() != null) spec = spec.and(AnnunciSpecification.hasVicinoTrasporti(filtriRicerca.getVicinoTrasporti()));
-        if (filtriRicerca.getClasseEnergetica() != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(filtriRicerca.getClasseEnergetica()));
-        if (filtriRicerca.getPiano() != null) spec = spec.and(AnnunciSpecification.hasPiano(filtriRicerca.getPiano()));
-        if (filtriRicerca.getTipoAnnuncio() != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(filtriRicerca.getTipoAnnuncio()));
+        spec = getAnnunciPrezzoMaxMin(filtriRicerca, spec);
+        spec = getAnnunciSuperficieMaxMin(filtriRicerca, spec);
+        spec = getAnnunciNumeroStanzeMaxMin(filtriRicerca, spec);
+        spec = getAnnunciCaratteristiche(filtriRicerca, spec);
+        spec = getAnnunciVicinanze(filtriRicerca, spec);
+        spec = getAnnunciOthers(filtriRicerca, spec);
         spec = spec.and(AnnunciSpecification.hasStatoAnnuncio(StatoAnnuncio.DISPONIBILE.toString()));
 
 
@@ -71,6 +59,48 @@ public class AnnuncioService {
         }
 
         return annuncioRepository.findAll(spec);
+    }
+
+    private static Specification<Annunci> getAnnunciOthers(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getClasseEnergetica() != null) spec = spec.and(AnnunciSpecification.hasClasseEnergetica(filtriRicerca.getClasseEnergetica()));
+        if (filtriRicerca.getPiano() != null) spec = spec.and(AnnunciSpecification.hasPiano(filtriRicerca.getPiano()));
+        if (filtriRicerca.getTipoAnnuncio() != null) spec = spec.and(AnnunciSpecification.hasTipoAnnuncio(filtriRicerca.getTipoAnnuncio()));
+        return spec;
+    }
+
+    private static Specification<Annunci> getAnnunciVicinanze(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getVicinoScuole() != null) spec = spec.and(AnnunciSpecification.hasVicinoScuole(filtriRicerca.getVicinoScuole()));
+        if (filtriRicerca.getVicinoParchi() != null) spec = spec.and(AnnunciSpecification.hasVicinoParchi(filtriRicerca.getVicinoParchi()));
+        if (filtriRicerca.getVicinoTrasporti() != null) spec = spec.and(AnnunciSpecification.hasVicinoTrasporti(filtriRicerca.getVicinoTrasporti()));
+        return spec;
+    }
+
+    private static Specification<Annunci> getAnnunciCaratteristiche(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getGarage() != null) spec = spec.and(AnnunciSpecification.hasGarage(filtriRicerca.getGarage()));
+        if (filtriRicerca.getAscensore() != null) spec = spec.and(AnnunciSpecification.hasAscensore(filtriRicerca.getAscensore()));
+        if (filtriRicerca.getPiscina() != null) spec = spec.and(AnnunciSpecification.hasPiscina(filtriRicerca.getPiscina()));
+        if (filtriRicerca.getArredo() != null) spec = spec.and(AnnunciSpecification.hasArredo(filtriRicerca.getArredo()));
+        if (filtriRicerca.getBalcone() != null) spec = spec.and(AnnunciSpecification.hasBalcone(filtriRicerca.getBalcone()));
+        if (filtriRicerca.getGiardino() != null) spec = spec.and(AnnunciSpecification.hasGiardino(filtriRicerca.getGiardino()));
+        return spec;
+    }
+
+    private static Specification<Annunci> getAnnunciNumeroStanzeMaxMin(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getNumStanzeMinime() != null) spec = spec.and(AnnunciSpecification.hasNumeroStanzeMinimo(filtriRicerca.getNumStanzeMinime()));
+        if (filtriRicerca.getNumStanzeMassime() != null) spec = spec.and(AnnunciSpecification.hasNumeroStanzeMassimo(filtriRicerca.getNumStanzeMassime()));
+        return spec;
+    }
+
+    private static Specification<Annunci> getAnnunciSuperficieMaxMin(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getSuperficieMinima() != null) spec = spec.and(AnnunciSpecification.hasSuperficieMinima(filtriRicerca.getSuperficieMinima()));
+        if (filtriRicerca.getSuperficieMassima() != null) spec = spec.and(AnnunciSpecification.hasSuperficieMassima(filtriRicerca.getSuperficieMassima()));
+        return spec;
+    }
+
+    private static Specification<Annunci> getAnnunciPrezzoMaxMin(FiltriRicerca filtriRicerca, Specification<Annunci> spec) {
+        if (filtriRicerca.getPrezzoMinimo() != null) spec = spec.and(AnnunciSpecification.hasPrezzoMinimo(filtriRicerca.getPrezzoMinimo()));
+        if (filtriRicerca.getPrezzoMassimo() != null) spec = spec.and(AnnunciSpecification.hasPrezzoMassimo(filtriRicerca.getPrezzoMassimo()));
+        return spec;
     }
 
     public List<Annunci> getAnnunciByAgenteSub(String sub) {
