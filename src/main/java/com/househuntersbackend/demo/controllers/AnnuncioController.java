@@ -1,9 +1,7 @@
 package com.househuntersbackend.demo.controllers;
 
+import com.househuntersbackend.demo.classes.annuncio.*;
 import com.househuntersbackend.demo.entities.Annunci;
-import com.househuntersbackend.demo.entities.FiltriRicerca;
-import com.househuntersbackend.demo.enumerations.ClasseEnergetica;
-import com.househuntersbackend.demo.enumerations.Piano;
 import com.househuntersbackend.demo.services.AnnuncioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,54 +26,8 @@ public class AnnuncioController {
         return new ResponseEntity<>(newAnnuncio, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public List<Annunci> getAnnunci(
-            @RequestParam(required = false) Double prezzoMinimo,
-            @RequestParam(required = false) Double prezzoMassimo,
-            @RequestParam(required = false) Integer superficieMinima,
-            @RequestParam(required = false) Integer superficieMassima,
-            @RequestParam(required = false) Integer numStanzeMinime,
-            @RequestParam(required = false) Integer numStanzeMassime,
-            @RequestParam(required = false) Boolean garage,
-            @RequestParam(required = false) Boolean ascensore,
-            @RequestParam(required = false) Boolean piscina,
-            @RequestParam(required = false) Boolean arredo,
-            @RequestParam(required = false) Boolean balcone,
-            @RequestParam(required = false) Boolean giardino,
-            @RequestParam(required = false) Boolean vicinoScuole,
-            @RequestParam(required = false) Boolean vicinoParchi,
-            @RequestParam(required = false) Boolean vicinoTrasporti,
-            @RequestParam(required = false) ClasseEnergetica classeEnergetica,
-            @RequestParam(required = false) Piano piano,
-            @RequestParam(required = false) String indirizzo,
-            @RequestParam(required = false) Double latitudine,
-            @RequestParam(required = false) Double longitudine,
-            @RequestParam(required = false) Double raggioKm,
-            @RequestParam(required = false) String tipoAnnuncio
-    ) {
-        FiltriRicerca filtriRicerca = new FiltriRicerca(
-                tipoAnnuncio,
-                latitudine,
-                longitudine,
-                raggioKm,
-                prezzoMinimo,
-                prezzoMassimo,
-                superficieMinima,
-                superficieMassima,
-                numStanzeMinime,
-                numStanzeMassime,
-                garage,
-                ascensore,
-                piscina,
-                arredo,
-                balcone,
-                giardino,
-                vicinoScuole,
-                vicinoParchi,
-                vicinoTrasporti,
-                classeEnergetica,
-                piano
-        );
+    @PostMapping("/filtriRicerca")
+    public List<Annunci> getAnnunci(@RequestBody FiltriRicerca filtriRicerca) {
         return annuncioService.getAnnunci(filtriRicerca);
     }
 
