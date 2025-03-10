@@ -17,7 +17,7 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
     @Query(value = """
         SELECT a.* FROM annunci a
         JOIN (
-            SELECT DISTINCT ON (c.id_annuncio) c.id_annuncio, c.data_visualizzazione 
+            SELECT DISTINCT ON (c.id_annuncio) c.id_annuncio, c.data_visualizzazione\s
             FROM cronologia c
             JOIN users u ON c.id_cliente = u.id
             WHERE u.id = CAST(:idCliente AS UUID) AND u.tipo = 'CLIENTE'
@@ -25,7 +25,7 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
         ) latest ON a.id = latest.id_annuncio
         ORDER BY latest.data_visualizzazione DESC
         LIMIT 5
-    """, nativeQuery = true)
+   \s""", nativeQuery = true)
     List<Annunci> findAnnunciRecentementeVisualizzatiByIdCliente(@Param("idCliente") String idCliente);
 
     @Query("""
@@ -48,11 +48,8 @@ public interface AnnuncioRepository extends JpaRepository<Annunci, UUID>, JpaSpe
             @Param("disponibili") boolean disponibili
     );
 
-
     @Modifying
     @Query("UPDATE Annunci a SET a.stato = :stato WHERE a.id = :idAnnuncio")
     void updateStatoAnnuncio(@Param("idAnnuncio") UUID idAnnuncio, @Param("stato") StatoAnnuncio stato);
 
-
-    List<Annunci> getAnnuncioById(UUID id);
 }

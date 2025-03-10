@@ -4,6 +4,7 @@ import com.househuntersbackend.demo.AnnunciSpecification;
 import com.househuntersbackend.demo.entities.Annunci;
 import com.househuntersbackend.demo.classes.annuncio.FiltriRicerca;
 import com.househuntersbackend.demo.enumerations.StatoAnnuncio;
+import com.househuntersbackend.demo.exceptions.AnnuncioNonEsistenteException;
 import com.househuntersbackend.demo.repositories.AnnuncioRepository;
 import com.househuntersbackend.demo.utils.AnnuncioUtils;
 import com.househuntersbackend.demo.utils.GeoUtils;
@@ -135,8 +136,8 @@ public class AnnuncioService {
     }
 
     public Annunci getAnnuncioById(UUID idAnnuncio) {
-        List<Annunci> annunci = annuncioRepository.getAnnuncioById(idAnnuncio);
-        return annunci.get(0);
+        return annuncioRepository.findById(idAnnuncio)
+                .orElseThrow(() -> new AnnuncioNonEsistenteException("Annuncio con ID " + idAnnuncio + " non trovato"));
     }
 
 }

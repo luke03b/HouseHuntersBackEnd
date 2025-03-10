@@ -1,7 +1,8 @@
 package com.househuntersbackend.demo.controllers;
 
-import com.househuntersbackend.demo.classes.annuncio.*;
+import com.househuntersbackend.demo.classes.annuncio.FiltriRicerca;
 import com.househuntersbackend.demo.entities.Annunci;
+import com.househuntersbackend.demo.exceptions.AnnuncioNonEsistenteException;
 import com.househuntersbackend.demo.services.AnnuncioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,9 +51,13 @@ public class AnnuncioController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Annunci> getAnnuncioById(@RequestParam UUID idAnnuncio) {
-        Annunci annuncio = annuncioService.getAnnuncioById(idAnnuncio);
-        return new ResponseEntity<>(annuncio, HttpStatus.OK);
+    public ResponseEntity<Object> getAnnuncioById(@RequestParam UUID idAnnuncio) {
+        try{
+            Annunci annuncio = annuncioService.getAnnuncioById(idAnnuncio);
+            return new ResponseEntity<>(annuncio, HttpStatus.OK);
+        } catch (AnnuncioNonEsistenteException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
 }
