@@ -3,13 +3,14 @@ package com.househuntersbackend.demo;
 import com.househuntersbackend.demo.entities.Annunci;
 import com.househuntersbackend.demo.enumerations.ClasseEnergetica;
 import com.househuntersbackend.demo.enumerations.Piano;
+import com.househuntersbackend.demo.enumerations.TipoAnnuncio;
 import org.springframework.data.jpa.domain.Specification;
 
 public class AnnunciSpecification {
 
     private AnnunciSpecification() {}
 
-    public static Specification<Annunci> hasTipoAnnuncio(String tipoAnnuncio) {
+    public static Specification<Annunci> hasTipoAnnuncio(TipoAnnuncio tipoAnnuncio) {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("tipoAnnuncio"), tipoAnnuncio);
     }

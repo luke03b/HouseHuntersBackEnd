@@ -2,9 +2,10 @@ package com.househuntersbackend.demo.classes.annuncio;
 
 import com.househuntersbackend.demo.enumerations.ClasseEnergetica;
 import com.househuntersbackend.demo.enumerations.Piano;
+import com.househuntersbackend.demo.enumerations.TipoAnnuncio;
 
 public class FiltriRicerca {
-    private final String tipoAnnuncio;
+    private final TipoAnnuncio tipoAnnuncio;
     private final Coordinate coordinate;
     private final Double raggioKm;
     private final IntervalloPrezzo intervalloPrezzo;
@@ -15,7 +16,7 @@ public class FiltriRicerca {
     private final ClasseEnergetica classeEnergetica;
     private final Piano piano;
 
-    public FiltriRicerca(String tipoAnnuncio, Coordinate coordinate, Double raggioKm, IntervalloPrezzo intervalloPrezzo,
+    public FiltriRicerca(TipoAnnuncio tipoAnnuncio, Coordinate coordinate, Double raggioKm, IntervalloPrezzo intervalloPrezzo,
                          IntervalloSuperficie intervalloSuperficie, IntervalloStanze intervalloStanze,
                          Caratteristiche caratteristiche, Vicinanze vicinanze, ClasseEnergetica classeEnergetica, Piano piano)
     {
@@ -31,7 +32,7 @@ public class FiltriRicerca {
         this.piano = piano;
     }
 
-    public String getTipoAnnuncio() {
+    public TipoAnnuncio getTipoAnnuncio() {
         return tipoAnnuncio;
     }
 
