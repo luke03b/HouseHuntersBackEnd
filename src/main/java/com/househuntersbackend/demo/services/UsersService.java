@@ -28,11 +28,11 @@ public class UsersService {
     }
 
     public Users getUserBySub(String sub) {
-        return usersRepository.findUsersBySub(sub).orElseThrow(UtenteNonTrovatoException::new);
+        return usersRepository.findUsersBySub(sub).orElseThrow();
     }
 
     @Transactional
-    public void deleteUser(String sub) {
+    public void deleteUser(String sub) throws UtenteNonTrovatoException {
         if (usersRepository.existsBySub(sub)) {
             Users user = getUserBySub(sub);
             offerteRepository.updateAcceptedOffers(user.getId(), user.getNome(), user.getCognome(), user.getEmail());
@@ -42,7 +42,7 @@ public class UsersService {
 
             usersRepository.deleteBySub(sub);
         } else {
-            throw new UtenteNonTrovatoException();
+            throw new UtenteNonTrovatoException("Utente con sub: " + sub + " non esiste");
         }
     }
 

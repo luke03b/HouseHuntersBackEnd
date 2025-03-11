@@ -1,7 +1,7 @@
 package com.househuntersbackend.demo.exceptions;
 
-public class UtenteNonTrovatoException extends RuntimeException {
-    public UtenteNonTrovatoException() {
-        super("Utente non trovato");
+public class UtenteNonTrovatoException extends Exception {
+    public UtenteNonTrovatoException(String message) {
+        super(message);
     }
 }
