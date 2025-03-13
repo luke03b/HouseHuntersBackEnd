@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.*;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/immagini")
@@ -30,7 +36,7 @@ public class ImmaginiController {
     @Value("${aws.s3.bucket-name}") String bucketName;
 
 
-    @GetMapping("/presigned-url")
+    @GetMapping("/upload-presigned-url")
     public String generatePresignedUrl(@RequestParam String fileName) {
         // Configura il presigner
         S3Presigner presigner = S3Presigner.builder()
@@ -67,5 +73,43 @@ public class ImmaginiController {
     public ResponseEntity<Immagini> createImmagini(@RequestBody Immagini immagini) {
         Immagini newImmagini = immaginiService.createImmagini(immagini);
         return new ResponseEntity<>(newImmagini, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public List<Immagini> getAllImmaginiByAnnuncioId(@RequestParam UUID idAnnuncio){
+        return immaginiService.getAllImmaginiByIdAnnuncio(idAnnuncio);
+    }
+
+    @GetMapping("/download-presigned-url")
+    public String downloadPresignedUrl(@RequestParam String fileName) {
+        // Configura il presigner
+        S3Presigner presigner = S3Presigner.builder()
+                .region(Region.EU_CENTRAL_1)
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(accessKey, secretKey)
+                ))
+                .build();
+
+        // Crea la richiesta di download
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .build();
+
+        // Configura la richiesta di presigned URL
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(5)) // 5 minuti di validità
+                .getObjectRequest(getObjectRequest)
+                .build();
+
+
+        // Genera il presigned URL
+        PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
+        String url = presignedRequest.url().toString();
+
+        // Chiudi il presigner
+        presigner.close();
+
+        return url;
     }
 }
