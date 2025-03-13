@@ -1,6 +1,7 @@
 package com.househuntersbackend.demo.controllers;
 
 import com.househuntersbackend.demo.entities.Visite;
+import com.househuntersbackend.demo.exceptions.DataNonValidaException;
 import com.househuntersbackend.demo.exceptions.OffertaAccettataEsistenteException;
 import com.househuntersbackend.demo.exceptions.VisitaInAttesaEsistenteException;
 import com.househuntersbackend.demo.exceptions.VisitaInAttesaPerFasciaOrariaEsistenteException;
@@ -37,6 +38,10 @@ public class VisiteController {
         } catch (OffertaAccettataEsistenteException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("annuncio venduto", "Esiste gia' un'offerta accettata per questo annuncio, quindi non e' possibile prenotare visite");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        } catch (DataNonValidaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("Data non valida", "Non è possibile prenotare visite per il giorno stesso, scegliere un giorno diverso e riprovare");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
