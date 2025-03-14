@@ -98,7 +98,7 @@ public class ImmaginiController {
 
         // Configura la richiesta di presigned URL
         GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(5)) // 5 minuti di validità
+                .signatureDuration(Duration.ofDays(1)) // 5 minuti di validità
                 .getObjectRequest(getObjectRequest)
                 .build();
 
