@@ -9,6 +9,7 @@ import com.househuntersbackend.demo.exceptions.VisitaInAttesaEsistenteException;
 import com.househuntersbackend.demo.exceptions.VisitaInAttesaPerFasciaOrariaEsistenteException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
+import com.househuntersbackend.demo.utils.VisiteUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class VisiteService {
         boolean esisteInAttesaOAccettataCliente = visiteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
                  visite.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visite.getAnnuncio()
         );
+
         if (esisteInAttesaOAccettataCliente) {
             throw new VisitaInAttesaEsistenteException("L'utente ha già una visita in attesa o confermata per questo annuncio.");
         }
@@ -49,8 +51,12 @@ public class VisiteService {
             throw new OffertaAccettataEsistenteException("esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
         }
 
-        if (visite.getData().isEqual(LocalDate.now())) {
-            throw new DataNonValidaException("non è possibile prenotare visite per il giorno stesso");
+//        if (visite.getData().isEqual(LocalDate.now())) {
+//            throw new DataNonValidaException("non è possibile prenotare visite per il giorno stesso");
+//        }
+
+        if(!VisiteUtils.isVisitaValida(visite.getData(), visite.getOrarioInizio(), visite.getOrarioFine())) {
+            throw new DataNonValidaException("non è possibile prenotare visite per il giorno stesso o oltre due settimane");
         }
 
         visite.setOrarioFine(visite.getOrarioInizio().plusHours(1));
