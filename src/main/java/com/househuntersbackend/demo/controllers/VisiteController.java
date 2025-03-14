@@ -24,27 +24,29 @@ public class VisiteController {
 
     @PostMapping
     public ResponseEntity<Object> createVisite(@RequestBody Visite visite) {
-        Visite newVisita;
         try {
-           newVisita = visiteService.createVisite(visite);
-        } catch (VisitaInAttesaEsistenteException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("visita in attesa esistente", "Esiste gia' una visita in attesa chiesta dal cliente per questo annuncio.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        } catch (VisitaInAttesaPerFasciaOrariaEsistenteException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("visita in attesa o accettata per quella fascia oraria", "Esiste gia' una visita in attesa o accettata per questo annuncio nella fascia oraria scelta");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        } catch (OffertaAccettataEsistenteException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("annuncio venduto", "Esiste gia' un'offerta accettata per questo annuncio, quindi non e' possibile prenotare visite");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        } catch (DataNonValidaException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("Data non valida", "Non è possibile prenotare visite per il giorno stesso, scegliere un giorno diverso e riprovare");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            Visite newVisita = visiteService.createVisite(visite);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newVisita);
+        } catch (Exception e) {
+            return handleException(e);
         }
-        return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
+    }
+
+    private ResponseEntity<Object> handleException(Exception e) {
+        Map<String, String> errorResponse = new HashMap<>();
+
+        if (e instanceof VisitaInAttesaEsistenteException) {
+            errorResponse.put("visita in attesa esistente", "Esiste già una visita in attesa chiesta dal cliente per questo annuncio.");
+        } else if (e instanceof VisitaInAttesaPerFasciaOrariaEsistenteException) {
+            errorResponse.put("visita in attesa o accettata per quella fascia oraria", "Esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria scelta.");
+        } else if (e instanceof OffertaAccettataEsistenteException) {
+            errorResponse.put("annuncio venduto", "Esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite.");
+        } else if (e instanceof DataNonValidaException) {
+            errorResponse.put("Data non valida", "Non è possibile prenotare visite per il giorno stesso, scegliere un giorno diverso e riprovare.");
+        } else {
+            errorResponse.put("Errore", "Si è verificato un errore imprevisto.");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @GetMapping
