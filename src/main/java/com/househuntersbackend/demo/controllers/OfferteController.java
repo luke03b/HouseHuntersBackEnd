@@ -22,19 +22,26 @@ public class OfferteController {
 
     @PostMapping
     public ResponseEntity<Object> createOfferte(@RequestBody Offerte offerte) {
-        Offerte newOfferta;
         try {
-            newOfferta = offerteService.createOfferte(offerte);
-        } catch (OffertaInAttesaEsistenteException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("offerta esistente", "Esiste gia' un'offerta in attesa da parte del cliente per questo annuncio.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        } catch (OffertaAccettataEsistenteException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("annuncio venduto", "Esiste gia' un'offerta accettata per questo annuncio.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            Offerte newOfferta = offerteService.createOfferte(offerte);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newOfferta);
+        } catch (Exception e) {
+            return handleException(e);
         }
-        return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
+    }
+
+    private ResponseEntity<Object> handleException(Exception e) {
+        Map<String, String> errorResponse = new HashMap<>();
+
+        if (e instanceof OffertaInAttesaEsistenteException) {
+            errorResponse.put("offerta esistente", "Esiste già un'offerta in attesa da parte del cliente per questo annuncio.");
+        } else if (e instanceof OffertaAccettataEsistenteException) {
+            errorResponse.put("annuncio venduto", "Esiste già un'offerta accettata per questo annuncio.");
+        } else {
+            errorResponse.put("errore", "Si è verificato un errore imprevisto.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @PutMapping
