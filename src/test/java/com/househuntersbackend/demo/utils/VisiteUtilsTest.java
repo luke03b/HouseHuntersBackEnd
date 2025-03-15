@@ -31,7 +31,8 @@ class VisiteUtilsTest {
     //1
     @Test
     void testDataValidaOrarioInizioMattinaOrarioFineMattina() {
-        assertTrue(visiteUtils.areAttributiVisitaValidi(LocalDate.now().plusDays(1), LocalTime.of(10, 0), LocalTime.of(11, 0)));
+        assertTrue(visiteUtils.areAttributiVisitaValidi(LocalDate.now().plusDays(2), LocalTime.of(10, 0), LocalTime.of(11, 0)));
+        assertThrows(VisitaNonValidaException.class, () -> visiteUtils.areAttributiVisitaValidi(LocalDate.of(2025, 4, 25), LocalTime.of(9, 0), LocalTime.of(10, 0)));
     }
 
     //2

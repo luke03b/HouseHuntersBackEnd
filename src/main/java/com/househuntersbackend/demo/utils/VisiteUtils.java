@@ -8,6 +8,7 @@ import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -32,9 +33,16 @@ public class VisiteUtils {
 
     public boolean areAttributiVisitaValidi(LocalDate dataVisita, LocalTime orarioInizioVisita, LocalTime orarioFineVisita) throws VisitaNonValidaException {
 
-        //controllo sabato e domenica
+        if (DateUtils.getFestivitaItaliane().contains(dataVisita)) {
+            throw new VisitaNonValidaException("Non e' possibile prenotare visite nei giorni festivi.");
+        }
+
+        if (dataVisita.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            throw new VisitaNonValidaException("Non e' possibile prenotare visite di domenica.");
+        }
+
         if(dataVisita.isBefore(GIORNO_MINIMO_PRENOTAZIONE) || dataVisita.isAfter(GIORNO_MASSIMO_PRENOTAZIONE)) {
-            throw new VisitaNonValidaException("Data non valida, è possibile prenotare visite nei giorni dal " + GIORNO_MINIMO_PRENOTAZIONE + " al " + GIORNO_MASSIMO_PRENOTAZIONE);
+            throw new VisitaNonValidaException("Data non valida, e' possibile prenotare visite nei giorni dal " + GIORNO_MINIMO_PRENOTAZIONE + " al " + GIORNO_MASSIMO_PRENOTAZIONE);
         }
 
         if(orarioInizioVisita.isAfter(orarioFineVisita)) {
@@ -57,10 +65,9 @@ public class VisiteUtils {
                 (orarioFineVisita.isAfter(ORARIO_INIZIO_PAUSA_PRANZO) && orarioFineVisita.isBefore(ORARIO_FINE_PAUSA_PRANZO)) ||
                 orarioInizioVisita.equals(ORARIO_INIZIO_PAUSA_PRANZO) || orarioFineVisita.equals(ORARIO_FINE_PAUSA_PRANZO) ||
                 (orarioInizioVisita.isBefore(ORARIO_INIZIO_PAUSA_PRANZO) && orarioFineVisita.isAfter(ORARIO_FINE_PAUSA_PRANZO))) {
-            throw new VisitaNonValidaException("Orario non valido, non è possibile prenotare una visita durante la pausa pranzo degli agenti, ovvero dalle "
+            throw new VisitaNonValidaException("Orario non valido, non e' possibile prenotare una visita durante la pausa pranzo degli agenti, ovvero dalle "
                     + ORARIO_INIZIO_PAUSA_PRANZO + " alle " + ORARIO_FINE_PAUSA_PRANZO);
         }
-
 
         return true;
 
@@ -72,7 +79,7 @@ public class VisiteUtils {
         );
 
         if (esisteInAttesaOAccettataCliente) {
-            throw new VisitaNonValidaException("L'utente ha già una visita in attesa o confermata per questo annuncio.");
+            throw new VisitaNonValidaException("L'utente ha gia' una visita in attesa o confermata per questo annuncio.");
         }
 
         boolean esisteInAttesaOAccettataFasciaOraria = visiteRepository.existsByAnnuncioAndStatoOrStatoAndDataAndOrarioInizio(
@@ -80,13 +87,13 @@ public class VisiteUtils {
         );
 
         if(esisteInAttesaOAccettataFasciaOraria) {
-            throw new VisitaNonValidaException("esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria indicata.");
+            throw new VisitaNonValidaException("esiste gia' una visita in attesa o accettata per questo annuncio nella fascia oraria indicata.");
         }
 
         boolean esisteOffertaAccettataSuAnnuncio = offerteRepository.existsByAnnuncioAndStato(visita.getAnnuncio(), StatoOfferta.ACCETTATA);
 
         if(esisteOffertaAccettataSuAnnuncio) {
-            throw new VisitaNonValidaException("esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
+            throw new VisitaNonValidaException("esiste gia' un'offerta accettata per questo annuncio, quindi non e' possibile prenotare visite");
         }
 
         return true;
