@@ -2,6 +2,7 @@ package com.househuntersbackend.demo.controllers;
 
 import com.househuntersbackend.demo.entities.Visite;
 import com.househuntersbackend.demo.exceptions.*;
+import com.househuntersbackend.demo.services.EmailService;
 import com.househuntersbackend.demo.services.VisiteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +15,27 @@ import java.util.*;
 public class VisiteController {
 
     private final VisiteService visiteService;
+    private final EmailService emailService;
 
-    public VisiteController(VisiteService visiteService) {
+    public VisiteController(VisiteService visiteService, EmailService emailService) {
         this.visiteService = visiteService;
+        this.emailService = emailService;
     }
 
     @PostMapping
     public ResponseEntity<Object> createVisite(@RequestBody Visite visite) {
         try {
             Visite newVisita = visiteService.createVisite(visite);
+
+            String corpoMail = emailService.creaCorpoMail(
+                    newVisita.getAnnuncio().getAgente().getNome(),
+                    newVisita.getAnnuncio().getTipoAnnuncio(),
+                    newVisita.getAnnuncio().getPrezzo(),
+                    newVisita.getAnnuncio().getIndirizzo()
+            );
+
+            emailService.sendEmail(newVisita.getAnnuncio().getAgente().getEmail(), "Nuova prenotazione al tuo annuncio su HouseHunters!", corpoMail);
+
             return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
         } catch (VisitaNonValidaException e) {
             Map<String, String> errorResponse = new HashMap<>();
