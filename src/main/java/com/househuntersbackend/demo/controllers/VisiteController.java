@@ -1,10 +1,7 @@
 package com.househuntersbackend.demo.controllers;
 
 import com.househuntersbackend.demo.entities.Visite;
-import com.househuntersbackend.demo.exceptions.DataNonValidaException;
-import com.househuntersbackend.demo.exceptions.OffertaAccettataEsistenteException;
-import com.househuntersbackend.demo.exceptions.VisitaInAttesaEsistenteException;
-import com.househuntersbackend.demo.exceptions.VisitaInAttesaPerFasciaOrariaEsistenteException;
+import com.househuntersbackend.demo.exceptions.*;
 import com.househuntersbackend.demo.services.VisiteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,27 +23,12 @@ public class VisiteController {
     public ResponseEntity<Object> createVisite(@RequestBody Visite visite) {
         try {
             Visite newVisita = visiteService.createVisite(visite);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newVisita);
-        } catch (Exception e) {
-            return handleException(e);
+            return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
+        } catch (VisitaNonValidaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("visita esistente", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-    }
-
-    private ResponseEntity<Object> handleException(Exception e) {
-        Map<String, String> errorResponse = new HashMap<>();
-
-        if (e instanceof VisitaInAttesaEsistenteException) {
-            errorResponse.put("visita in attesa esistente", "Esiste già una visita in attesa chiesta dal cliente per questo annuncio.");
-        } else if (e instanceof VisitaInAttesaPerFasciaOrariaEsistenteException) {
-            errorResponse.put("visita in attesa o accettata per quella fascia oraria", "Esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria scelta.");
-        } else if (e instanceof OffertaAccettataEsistenteException) {
-            errorResponse.put("annuncio venduto", "Esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite.");
-        } else if (e instanceof DataNonValidaException) {
-            errorResponse.put("Data non valida", "Non è possibile prenotare visite per il giorno stesso, scegliere un giorno diverso e riprovare.");
-        } else {
-            errorResponse.put("Errore", "Si è verificato un errore imprevisto.");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @GetMapping

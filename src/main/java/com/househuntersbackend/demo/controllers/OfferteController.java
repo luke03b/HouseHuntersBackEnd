@@ -1,8 +1,7 @@
 package com.househuntersbackend.demo.controllers;
 
 import com.househuntersbackend.demo.entities.Offerte;
-import com.househuntersbackend.demo.exceptions.OffertaAccettataEsistenteException;
-import com.househuntersbackend.demo.exceptions.OffertaInAttesaEsistenteException;
+import com.househuntersbackend.demo.exceptions.OffertaNonValidaException;
 import com.househuntersbackend.demo.services.OfferteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +23,12 @@ public class OfferteController {
     public ResponseEntity<Object> createOfferte(@RequestBody Offerte offerte) {
         try {
             Offerte newOfferta = offerteService.createOfferte(offerte);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newOfferta);
-        } catch (Exception e) {
-            return handleException(e);
+            return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
+        } catch (OffertaNonValidaException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("offerta esistente", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
-    }
-
-    private ResponseEntity<Object> handleException(Exception e) {
-        Map<String, String> errorResponse = new HashMap<>();
-
-        if (e instanceof OffertaInAttesaEsistenteException) {
-            errorResponse.put("offerta esistente", "Esiste già un'offerta in attesa da parte del cliente per questo annuncio.");
-        } else if (e instanceof OffertaAccettataEsistenteException) {
-            errorResponse.put("annuncio venduto", "Esiste già un'offerta accettata per questo annuncio.");
-        } else {
-            errorResponse.put("errore", "Si è verificato un errore imprevisto.");
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @PutMapping

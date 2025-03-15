@@ -7,7 +7,6 @@ import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.UsersRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,16 +23,21 @@ public class UsersService {
         this.cronologiaRepository = cronologiaRepository;
     }
 
-    public Users createUser(Users user) {
-        try {
+    public Users createUser(Users user) throws UtenteNonTrovatoException {
+        if(!usersRepository.existsBySub(user.getSub())) {
             return usersRepository.save(user);
-        } catch (DataIntegrityViolationException e) {
-            // Log dell'errore (opzionale)
-            System.out.println("L'utente esiste già: " + e.getMessage());
-
-            // Restituisci null oppure un valore di default
-            return null;
+        } else {
+            throw new UtenteNonTrovatoException("L'utente con sub " + user.getSub() + " non e' presente nei nostri database");
         }
+//        try {
+//            return usersRepository.save(user);
+//        } catch (DataIntegrityViolationException e) {
+//            // Log dell'errore (opzionale)
+//            System.out.println("L'utente esiste già: " + e.getMessage());
+//
+//            // Restituisci null oppure un valore di default
+//            return null;
+//        }
     }
 
     public Users getUserBySub(String sub) {

@@ -18,9 +18,13 @@ public class UsersController {
     }
 
     @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        Users newUser = usersService.createUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    public ResponseEntity<Object> createUser(@RequestBody Users user) {
+        try {
+            Users newUser = usersService.createUser(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (UtenteNonTrovatoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

@@ -5,8 +5,7 @@ import com.househuntersbackend.demo.enumerations.StatoAnnuncio;
 import com.househuntersbackend.demo.enumerations.StatoOfferta;
 import com.househuntersbackend.demo.enumerations.StatoVisita;
 import com.househuntersbackend.demo.enumerations.UserType;
-import com.househuntersbackend.demo.exceptions.OffertaAccettataEsistenteException;
-import com.househuntersbackend.demo.exceptions.OffertaInAttesaEsistenteException;
+import com.househuntersbackend.demo.exceptions.OffertaNonValidaException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +30,7 @@ public class OfferteService {
     }
 
 
-    public Offerte createOfferte(Offerte offerte) throws OffertaInAttesaEsistenteException, OffertaAccettataEsistenteException {
+    public Offerte createOfferte(Offerte offerte) throws OffertaNonValidaException {
         if(offerte.getCliente() != null) {
             boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
                     offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
@@ -40,11 +39,11 @@ public class OfferteService {
             boolean esisteAccettata = offerteRepository.existsByAnnuncioAndStato(offerte.getAnnuncio(), StatoOfferta.ACCETTATA);
 
             if(esisteAccettata){
-                throw new OffertaAccettataEsistenteException("Esiste già un'offerta accettata per l'annuncio");
+                throw new OffertaNonValidaException("Esiste già un'offerta accettata per l'annuncio");
             }
 
             if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
-                throw new OffertaInAttesaEsistenteException("L'utente ha già un'offerta in attesa per questo annuncio.");
+                throw new OffertaNonValidaException("L'utente ha già un'offerta in attesa per questo annuncio.");
             }
         }
         offerte.setStato(StatoOfferta.IN_ATTESA);
