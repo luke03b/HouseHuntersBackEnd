@@ -55,7 +55,6 @@ public class VisiteService {
 
         try {
             visiteUtils.isVisitaEsistente(visite);
-            visite.setOrarioFine(visite.getOrarioInizio().plusHours(1));
             visite.setStato(StatoVisita.IN_ATTESA);
             visiteUtils.areAttributiVisitaValidi(visite.getData(), visite.getOrarioInizio(), visite.getOrarioFine());
             return visiteRepository.save(visite);
