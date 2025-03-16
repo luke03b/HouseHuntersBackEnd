@@ -1,6 +1,6 @@
 package com.househuntersbackend.demo.entities;
 
-import com.househuntersbackend.demo.enumerations.UserType;
+import com.househuntersbackend.demo.enumerations.TipoUtente;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class Users {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "tipo")
-    private UserType tipo;
+    private TipoUtente tipo;
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "idagenzia", nullable = true)

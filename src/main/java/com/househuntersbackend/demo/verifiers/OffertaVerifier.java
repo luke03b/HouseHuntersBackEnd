@@ -2,7 +2,7 @@ package com.househuntersbackend.demo.verifiers;
 
 import com.househuntersbackend.demo.entities.Offerte;
 import com.househuntersbackend.demo.enumerations.StatoOfferta;
-import com.househuntersbackend.demo.enumerations.UserType;
+import com.househuntersbackend.demo.enumerations.TipoUtente;
 import com.househuntersbackend.demo.exceptions.OffertaNonValidaException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ public class OffertaVerifier {
                 offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
         );
 
-        if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
+        if (esisteInAttesa && offerte.getCliente().getTipo().equals(TipoUtente.CLIENTE)) {
             throw new OffertaNonValidaException("L'utente ha già un'offerta in attesa per questo annuncio.");
         }
 
