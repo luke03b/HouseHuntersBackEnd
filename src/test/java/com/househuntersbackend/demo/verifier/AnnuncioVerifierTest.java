@@ -61,7 +61,7 @@ class AnnuncioVerifierTest {
     //1
     @Test
     void testIndirizzoValidoLatitudineValidaLongitudineValida() {
-        assertTrue(annuncioVerifier.isPosizioneAnnuncioValida("Via Tommaso De Vivo, 10, Orta di Atella, CE, Italia", 40.970556599999995, 14.266755199999999));
+        assertTrue(annuncioVerifier.isPosizioneAnnuncioValida("Minecraft city, Chemin Rémy, Dampierre-en-Burly, France", 47.73909253263101, 2.5195524489149523));
     }
 
     //2

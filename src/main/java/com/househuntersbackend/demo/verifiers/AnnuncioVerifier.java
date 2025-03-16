@@ -66,6 +66,6 @@ public class AnnuncioVerifier {
             return false;
         }
 
-        return indirizzo.matches("^[A-Za-z0-9 ,.'-]+$");
+        return indirizzo.matches("^[\\p{L}0-9\\s.,'’‘\"\\-\\/()#&]+$");
     }
 }

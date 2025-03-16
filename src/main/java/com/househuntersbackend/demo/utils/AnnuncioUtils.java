@@ -15,11 +15,10 @@ import java.io.IOException;
 @Component
 public class AnnuncioUtils {
 
-    private static final String SCUOLA = "Scuola";
-    private static final String PARCHI = "Parchi";
-    private static final String TRASPORTI = "Trasporti";
-    @Value("${geoapify.api.key}")
-    private String geoapifyApiKey;
+    @Value("${geoapify.api.key}") private String geoapifyApiKey;
+    private final String SCUOLA = "Scuola";
+    private final String PARCHI = "Parchi";
+    private final String TRASPORTI = "Trasporti";
 
     private String urlBuilder(Double latitudine, Double longitudine, String categoria) {
         String url = "https://api.geoapify.com/v2/places?categories=";

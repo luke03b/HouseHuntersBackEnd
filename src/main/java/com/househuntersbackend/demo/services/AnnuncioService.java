@@ -21,11 +21,12 @@ public class AnnuncioService {
 
     private final AnnuncioVerifier annuncioVerifier;
     private final AnnuncioRepository annuncioRepository;
-    private final AnnuncioUtils annuncioUtils = new AnnuncioUtils();
+    private final AnnuncioUtils annuncioUtils;
 
-    public AnnuncioService(AnnuncioVerifier annuncioVerifier, AnnuncioRepository annuncioRepository) {
+    public AnnuncioService(AnnuncioVerifier annuncioVerifier, AnnuncioRepository annuncioRepository, AnnuncioUtils annuncioUtils) {
         this.annuncioVerifier = annuncioVerifier;
         this.annuncioRepository = annuncioRepository;
+        this.annuncioUtils = annuncioUtils;
     }
 
     public Annunci createAnnuncio(Annunci annuncio) {
