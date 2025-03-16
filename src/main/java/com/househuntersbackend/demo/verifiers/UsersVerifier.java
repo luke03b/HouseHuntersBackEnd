@@ -6,16 +6,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UsersVerifier {
+
+    String nomeOCognomeRegex = "^[A-Za-zÀ-ÿ'-]+(?: [A-Za-zÀ-ÿ'-]+)*$";
+
     public boolean areUserAttributiValidi(String email, String nome, String cognome, TipoUtente tipo, String idAgenziaImmobiliare) throws UtenteNonValidoException {
         if(email == null || email.isEmpty() || !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
             throw new UtenteNonValidoException("Email non valida");
         }
 
-        if(nome == null || nome.isEmpty() || !nome.matches("^[A-Za-zÀ-ÿ'-]+(?: [A-Za-zÀ-ÿ'-]+)*$")) {
+        if(nome == null || nome.isEmpty() || !nome.matches(nomeOCognomeRegex)) {
             throw new UtenteNonValidoException("Nome non valido");
         }
 
-        if(cognome == null || cognome.isEmpty() || !cognome.matches("^[A-Za-zÀ-ÿ'-]+(?: [A-Za-zÀ-ÿ'-]+)*$")) {
+        if(cognome == null || cognome.isEmpty() || !cognome.matches(nomeOCognomeRegex)) {
             throw new UtenteNonValidoException("Cognome non valido");
         }
 
