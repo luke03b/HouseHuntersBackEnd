@@ -4,10 +4,11 @@ import com.househuntersbackend.demo.entities.Offerte;
 import com.househuntersbackend.demo.enumerations.StatoAnnuncio;
 import com.househuntersbackend.demo.enumerations.StatoOfferta;
 import com.househuntersbackend.demo.enumerations.StatoVisita;
-import com.househuntersbackend.demo.enumerations.UserType;
 import com.househuntersbackend.demo.exceptions.OffertaNonValidaException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
+import com.househuntersbackend.demo.utils.OffertaUtils;
+import com.househuntersbackend.demo.verifiers.OffertaVerifier;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -19,36 +20,28 @@ import java.util.UUID;
 
 @Service
 public class OfferteService {
+    private final OffertaVerifier offertaVerifier;
     private final OfferteRepository offerteRepository;
     private final AnnuncioService annuncioService;
     private final VisiteRepository visiteRepository;
 
-    public OfferteService(OfferteRepository offerteRepository, AnnuncioService annuncioService, VisiteRepository visiteRepository) {
+    public OfferteService(OfferteRepository offerteRepository, AnnuncioService annuncioService, VisiteRepository visiteRepository, OffertaVerifier offertaVerifier) {
         this.offerteRepository = offerteRepository;
         this.annuncioService = annuncioService;
         this.visiteRepository = visiteRepository;
+        this.offertaVerifier = offertaVerifier;
     }
 
-
     public Offerte createOfferte(Offerte offerte) throws OffertaNonValidaException {
-        if(offerte.getCliente() != null) {
-            boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
-                    offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
-            );
-
-            boolean esisteAccettata = offerteRepository.existsByAnnuncioAndStato(offerte.getAnnuncio(), StatoOfferta.ACCETTATA);
-
-            if(esisteAccettata){
-                throw new OffertaNonValidaException("Esiste già un'offerta accettata per l'annuncio");
-            }
-
-            if (esisteInAttesa && offerte.getCliente().getTipo().equals(UserType.CLIENTE)) {
-                throw new OffertaNonValidaException("L'utente ha già un'offerta in attesa per questo annuncio.");
-            }
+        try{
+            offertaVerifier.isOffertaEsistente(offerte);
+            offerte.setStato(StatoOfferta.IN_ATTESA);
+            offerte.setData(LocalDateTime.now());
+            offertaVerifier.areAttributiOffertaValidi(offerte.getPrezzo(), offerte.getAnnuncio().getPrezzo(), offerte.getData().toLocalDate());
+            return offerteRepository.save(offerte);
+        } catch (OffertaNonValidaException e) {
+            throw new OffertaNonValidaException(e.getMessage());
         }
-        offerte.setStato(StatoOfferta.IN_ATTESA);
-        offerte.setData(LocalDateTime.now());
-        return offerteRepository.save(offerte);
     }
 
     public List<Offerte> getAllOfferteOnAnnuncio(UUID idAnnuncio) {
@@ -66,14 +59,10 @@ public class OfferteService {
         if (existingOfferta.isPresent()) {
             Offerte offertaToUpdate = existingOfferta.get();
 
-            if(stato.equals(StatoOfferta.RIFIUTATA.toString())) {
-                offertaToUpdate.setStato(StatoOfferta.RIFIUTATA);
-            } else if (stato.equals(StatoOfferta.IN_ATTESA.toString())){
-                offertaToUpdate.setStato(StatoOfferta.IN_ATTESA);
-            } else {
-                offertaToUpdate.setStato(StatoOfferta.ACCETTATA);
+            offertaToUpdate.setStato(OffertaUtils.mappaStatoOfferta(stato));
+            if(offertaToUpdate.getStato().equals(StatoOfferta.ACCETTATA)) {
                 offerteRepository.updateStatoOfferteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getId(), StatoOfferta.RIFIUTATA);
-                if(offertaToUpdate.getCliente() != null) {
+                if(!OffertaUtils.isOffertaManuale(offertaToUpdate)) {
                     visiteRepository.updateStatoVisiteEscluse(offertaToUpdate.getAnnuncio().getId(), offertaToUpdate.getCliente().getId(), StatoVisita.RIFIUTATA);
                 } else {
                     visiteRepository.updateStatoVisitePerAnnuncio(offertaToUpdate.getAnnuncio().getId(), StatoVisita.RIFIUTATA);
@@ -81,7 +70,6 @@ public class OfferteService {
                 annuncioService.updateStatoAnnuncio(offerte.getAnnuncio().getId(), StatoAnnuncio.CONCLUSO);
             }
 
-            // Salva e restituisci l'entità aggiornata
             return offerteRepository.save(offertaToUpdate);
         } else {
             throw new EntityNotFoundException("Offerta non trovata con ID: " + offerte.getId());
@@ -95,7 +83,7 @@ public class OfferteService {
             Offerte offertaToUpdate = existingOfferta.get();
 
             offertaToUpdate.setStato(StatoOfferta.CONTROPROPOSTA);
-            offertaToUpdate.setControProposta(controproposta.get());
+            controproposta.ifPresent(offertaToUpdate::setControProposta);
 
             return offerteRepository.save(offertaToUpdate);
         } else {
@@ -104,18 +92,6 @@ public class OfferteService {
     }
 
     public List<Offerte> getOfferteSuAnnuncioByStato(UUID idAnnuncio, String stato) {
-        StatoOfferta statoFormattato;
-        if(stato.equals(StatoOfferta.RIFIUTATA.toString())) {
-            statoFormattato = StatoOfferta.RIFIUTATA;
-        } else if (stato.equals(StatoOfferta.IN_ATTESA.toString())){
-            statoFormattato = StatoOfferta.IN_ATTESA;
-        } else if (stato.equals(StatoOfferta.ACCETTATA.toString())){
-            statoFormattato = StatoOfferta.ACCETTATA;
-        } else {
-            statoFormattato = StatoOfferta.CONTROPROPOSTA;
-        }
-
-        // Salva e restituisci l'entità aggiornata
-        return offerteRepository.findOfferteByAnnuncioIdAndStato(idAnnuncio, statoFormattato);
+        return offerteRepository.findOfferteByAnnuncioIdAndStato(idAnnuncio, OffertaUtils.mappaStatoOfferta(stato));
     }
 }

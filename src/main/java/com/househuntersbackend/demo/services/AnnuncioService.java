@@ -8,6 +8,7 @@ import com.househuntersbackend.demo.exceptions.AnnuncioNonEsistenteException;
 import com.househuntersbackend.demo.repositories.AnnuncioRepository;
 import com.househuntersbackend.demo.utils.AnnuncioUtils;
 import com.househuntersbackend.demo.utils.GeoUtils;
+import com.househuntersbackend.demo.verifiers.AnnuncioVerifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +19,24 @@ import java.util.UUID;
 @Service
 public class AnnuncioService {
 
+    private final AnnuncioVerifier annuncioVerifier;
     private final AnnuncioRepository annuncioRepository;
     private final AnnuncioUtils annuncioUtils = new AnnuncioUtils();
 
-    public AnnuncioService(AnnuncioRepository annuncioRepository) {
+    public AnnuncioService(AnnuncioVerifier annuncioVerifier, AnnuncioRepository annuncioRepository) {
+        this.annuncioVerifier = annuncioVerifier;
         this.annuncioRepository = annuncioRepository;
     }
 
-
     public Annunci createAnnuncio(Annunci annuncio) {
-        annuncio.setDataCreazione(LocalDateTime.now());
-
-        annuncioUtils.setVicinanze(annuncio);
-
-        return annuncioRepository.save(annuncio);
+        try {
+            annuncio.setDataCreazione(LocalDateTime.now());
+            annuncioUtils.setVicinanze(annuncio);
+            annuncioVerifier.areAttributiAnnuncioValidi(annuncio);
+            return annuncioRepository.save(annuncio);
+        } catch (AnnuncioNonEsistenteException e) {
+            throw new AnnuncioNonEsistenteException(e.getMessage());
+        }
     }
 
 
@@ -139,5 +144,4 @@ public class AnnuncioService {
         return annuncioRepository.findById(idAnnuncio)
                 .orElseThrow(() -> new AnnuncioNonEsistenteException("Annuncio con ID " + idAnnuncio + " non trovato"));
     }
-
 }

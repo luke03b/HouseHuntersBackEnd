@@ -3,17 +3,23 @@ package com.househuntersbackend.demo.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.househuntersbackend.demo.entities.Annunci;
+import com.househuntersbackend.demo.enumerations.TipoAnnuncio;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class AnnuncioUtils {
-    private static final String GEOAPIFY_API_KEY = "733bfdc35e7a4882b57949a1fd6bbf26";
+
     private static final String SCUOLA = "Scuola";
     private static final String PARCHI = "Parchi";
     private static final String TRASPORTI = "Trasporti";
+    @Value("${geoapify.api.key}")
+    private String geoapifyApiKey;
 
     private String urlBuilder(Double latitudine, Double longitudine, String categoria) {
         String url = "https://api.geoapify.com/v2/places?categories=";
@@ -31,7 +37,7 @@ public class AnnuncioUtils {
                 break;
         }
 
-        url = url + "&filter=circle:" + longitudine + "," + latitudine + ",1000&bias=proximity:" + longitudine + "," + latitudine + "&limit=1&apiKey=" + GEOAPIFY_API_KEY;
+        url = url + "&filter=circle:" + longitudine + "," + latitudine + ",1000&bias=proximity:" + longitudine + "," + latitudine + "&limit=1&apiKey=" + geoapifyApiKey;
 
         return url;
     }
@@ -84,5 +90,13 @@ public class AnnuncioUtils {
         annuncio.setVicinoScuole(vicinoScuole);
         annuncio.setVicinoParchi(vicinoParchi);
         annuncio.setVicinoTrasporti(vicinoTrasporti);
+    }
+
+    public TipoAnnuncio mappaTipoAnnuncio(String tipo) {
+        if(tipo.equals("VENDITA")) {
+            return TipoAnnuncio.VENDITA;
+        } else {
+            return TipoAnnuncio.AFFITTO;
+        }
     }
 }

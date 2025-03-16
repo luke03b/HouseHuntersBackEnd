@@ -1,4 +1,4 @@
-package com.househuntersbackend.demo.utils;
+package com.househuntersbackend.demo.verifiers;
 
 import com.househuntersbackend.demo.entities.Visite;
 import com.househuntersbackend.demo.enumerations.StatoOfferta;
@@ -6,6 +6,7 @@ import com.househuntersbackend.demo.enumerations.StatoVisita;
 import com.househuntersbackend.demo.exceptions.VisitaNonValidaException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
+import com.househuntersbackend.demo.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -13,10 +14,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Component
-public class VisiteUtils {
+public class VisitaVerifier {
 
     private final VisiteRepository visiteRepository;
     private final OfferteRepository offerteRepository;
+
     private static final LocalDate GIORNO_MINIMO_PRENOTAZIONE = LocalDate.now().plusDays(1);
     private static final LocalDate GIORNO_MASSIMO_PRENOTAZIONE = GIORNO_MINIMO_PRENOTAZIONE.plusDays(13);
     private static final LocalTime ORARIO_INIZIO_MINIMO_PRENOTAZIONE = LocalTime.of(9, 0);
@@ -26,7 +28,7 @@ public class VisiteUtils {
     private static final LocalTime ORARIO_INIZIO_PAUSA_PRANZO = LocalTime.of(13, 0);
     private static final LocalTime ORARIO_FINE_PAUSA_PRANZO = LocalTime.of(14, 0);
 
-    public VisiteUtils(VisiteRepository visiteRepository, OfferteRepository offerteRepository) {
+    public VisitaVerifier(VisiteRepository visiteRepository, OfferteRepository offerteRepository) {
         this.visiteRepository = visiteRepository;
         this.offerteRepository = offerteRepository;
     }

@@ -39,7 +39,7 @@ public class VisiteController {
             return new ResponseEntity<>(newVisita, HttpStatus.CREATED);
         } catch (VisitaNonValidaException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("visita esistente", e.getMessage());
+            errorResponse.put("visita non valida", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }

@@ -4,7 +4,8 @@ import com.househuntersbackend.demo.entities.Visite;
 import com.househuntersbackend.demo.enumerations.StatoVisita;
 import com.househuntersbackend.demo.exceptions.*;
 import com.househuntersbackend.demo.repositories.VisiteRepository;
-import com.househuntersbackend.demo.utils.VisiteUtils;
+import com.househuntersbackend.demo.utils.VisitaUtils;
+import com.househuntersbackend.demo.verifiers.VisitaVerifier;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,48 +16,18 @@ import java.util.UUID;
 @Service
 public class VisiteService {
     private final VisiteRepository visiteRepository;
-    private final VisiteUtils visiteUtils;
+    private final VisitaVerifier visitaVerifier;
 
-    public VisiteService(VisiteRepository visiteRepository, VisiteUtils visiteUtils) {
+    public VisiteService(VisiteRepository visiteRepository, VisitaVerifier visitaVerifier) {
         this.visiteRepository = visiteRepository;
-        this.visiteUtils = visiteUtils;
+        this.visitaVerifier = visitaVerifier;
     }
 
     public Visite createVisite(Visite visite) throws VisitaNonValidaException {
-//        boolean esisteInAttesaOAccettataCliente = visiteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
-//                 visite.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visite.getAnnuncio()
-//        );
-//
-//        if (esisteInAttesaOAccettataCliente) {
-//            throw new VisitaInAttesaEsistenteException("L'utente ha già una visita in attesa o confermata per questo annuncio.");
-//        }
-//
-//        boolean esisteInAttesaOAccettataFasciaOraria = visiteRepository.existsByAnnuncioAndStatoOrStatoAndDataAndOrarioInizio(
-//                visite.getAnnuncio(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visite.getData(), visite.getOrarioInizio()
-//        );
-//
-//        if(esisteInAttesaOAccettataFasciaOraria) {
-//            throw new VisitaInAttesaPerFasciaOrariaEsistenteException("esiste già una visita in attesa o accettata per questo annuncio nella fascia oraria indicata.");
-//        }
-//
-//        boolean esisteOffertaAccettataSuAnnuncio = offerteRepository.existsByAnnuncioAndStato(visite.getAnnuncio(), StatoOfferta.ACCETTATA);
-//
-//        if(esisteOffertaAccettataSuAnnuncio) {
-//            throw new OffertaAccettataEsistenteException("esiste già un'offerta accettata per questo annuncio, quindi non è possibile prenotare visite");
-//        }
-
-//        if (visite.getData().isEqual(LocalDate.now())) {
-//            throw new DataNonValidaException("non è possibile prenotare visite per il giorno stesso");
-//        }
-
-//        if(!VisiteUtils.areAttributiVisitaValidi(visite.getData(), visite.getOrarioInizio(), visite.getOrarioFine())) {
-//            throw new VisitaNonValidaException("non è possibile prenotare visite per il giorno stesso o oltre due settimane");
-//        }
-
         try {
-            visiteUtils.isVisitaEsistente(visite);
+            visitaVerifier.isVisitaEsistente(visite);
             visite.setStato(StatoVisita.IN_ATTESA);
-            visiteUtils.areAttributiVisitaValidi(visite.getData(), visite.getOrarioInizio(), visite.getOrarioFine());
+            visitaVerifier.areAttributiVisitaValidi(visite.getData(), visite.getOrarioInizio(), visite.getOrarioFine());
             return visiteRepository.save(visite);
         } catch (VisitaNonValidaException e) {
             throw new VisitaNonValidaException(e.getMessage());
@@ -72,16 +43,7 @@ public class VisiteService {
     }
 
     public List<Visite> getVisiteByStatoOnAnnuncio(UUID idAnnuncio, String stato){
-        StatoVisita statoFormattato;
-        if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
-            statoFormattato = StatoVisita.RIFIUTATA;
-        } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
-            statoFormattato = StatoVisita.IN_ATTESA;
-        } else {
-            statoFormattato = StatoVisita.CONFERMATA;
-        }
-
-        return visiteRepository.findVisiteByAnnuncioIdAndStato(idAnnuncio, statoFormattato);
+        return visiteRepository.findVisiteByAnnuncioIdAndStato(idAnnuncio, VisitaUtils.mappaStatoVisita(stato));
     }
 
     public void updateStatoVisite(Visite visite, String stato) {
@@ -90,13 +52,7 @@ public class VisiteService {
         if (existingVisita.isPresent()) {
             Visite visitaToUpdate = existingVisita.get();
 
-            if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
-                visitaToUpdate.setStato(StatoVisita.RIFIUTATA);
-            } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
-                visitaToUpdate.setStato(StatoVisita.IN_ATTESA);
-            } else {
-                visitaToUpdate.setStato(StatoVisita.CONFERMATA);
-            }
+            visitaToUpdate.setStato(VisitaUtils.mappaStatoVisita(stato));
 
             visiteRepository.save(visitaToUpdate);
         } else {
@@ -105,15 +61,6 @@ public class VisiteService {
     }
 
     public List<Visite> getTutteVisiteConStatoByAgente(String stato, String subAgente){
-        StatoVisita statoFormattato;
-        if(stato.equals(StatoVisita.RIFIUTATA.toString())) {
-            statoFormattato = StatoVisita.RIFIUTATA;
-        } else if (stato.equals(StatoVisita.IN_ATTESA.toString())){
-            statoFormattato = StatoVisita.IN_ATTESA;
-        } else {
-            statoFormattato = StatoVisita.CONFERMATA;
-        }
-
-        return visiteRepository.findVisiteByStatoAndAgente(statoFormattato, subAgente);
+        return visiteRepository.findVisiteByStatoAndAgente(VisitaUtils.mappaStatoVisita(stato), subAgente);
     }
 }

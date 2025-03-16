@@ -93,8 +93,4 @@ public class Annunci {
 
     @Column(nullable = false, name = "descrizione", columnDefinition = "TEXT")
     private String descrizione;
-
-//    @OneToMany(mappedBy = "annuncio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Immagini> immagini = new ArrayList<>();
 }
-

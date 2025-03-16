@@ -26,7 +26,7 @@ public class OfferteController {
             return new ResponseEntity<>(newOfferta, HttpStatus.CREATED);
         } catch (OffertaNonValidaException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("offerta esistente", e.getMessage());
+            errorResponse.put("offerta non valida", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }

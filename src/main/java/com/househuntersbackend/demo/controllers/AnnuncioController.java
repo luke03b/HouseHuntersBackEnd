@@ -3,6 +3,7 @@ package com.househuntersbackend.demo.controllers;
 import com.househuntersbackend.demo.classes.annuncio.FiltriRicerca;
 import com.househuntersbackend.demo.entities.Annunci;
 import com.househuntersbackend.demo.exceptions.AnnuncioNonEsistenteException;
+import com.househuntersbackend.demo.exceptions.AnnuncioNonValidoException;
 import com.househuntersbackend.demo.services.AnnuncioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,12 @@ public class AnnuncioController {
     }
 
     @PostMapping
-    public ResponseEntity<Annunci> createAnnuncio(@RequestBody Annunci annuncio) {
-        Annunci newAnnuncio = annuncioService.createAnnuncio(annuncio);
-        return new ResponseEntity<>(newAnnuncio, HttpStatus.CREATED);
+    public ResponseEntity<Object> createAnnuncio(@RequestBody Annunci annuncio) {
+        try {
+            return new ResponseEntity<>(annuncioService.createAnnuncio(annuncio), HttpStatus.CREATED);
+        } catch (AnnuncioNonValidoException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/filtriRicerca")
