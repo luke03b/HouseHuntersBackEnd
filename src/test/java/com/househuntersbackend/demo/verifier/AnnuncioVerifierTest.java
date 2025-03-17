@@ -4,6 +4,8 @@ import com.househuntersbackend.demo.enumerations.Piano;
 import com.househuntersbackend.demo.verifiers.AnnuncioVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,86 +19,194 @@ class AnnuncioVerifierTest {
     }
 
     //1
-    @Test
-    void testSuperficieValidaNumeroStanzeValido() {
-        assertTrue(annuncioVerifier.areSuperficieENumeroStanzeValidi(100, 5));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' superficie e ' ' {1} ' ' stanze sono validi")
+    @CsvSource({
+            "1, 1",
+            "2, 2",
+            "500000, 1000",
+    })
+    void testSuperficieValidaNumeroStanzeValido(int superficie, int numeroStanze) {
+        boolean res = annuncioVerifier.areSuperficieENumeroStanzeValidi(superficie, numeroStanze);
+
+        assertTrue(res);
     }
 
     //2
-    @Test
-    void testSuperficieInvalidaNumeroStanzeValido() {
-        assertFalse(annuncioVerifier.areSuperficieENumeroStanzeValidi(-100, 7));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' superficie è invalida ma ' ' {1} ' ' stanze è valido")
+    @CsvSource({
+            "0, 1",
+            "-1, 2",
+            "-500000, 1000",
+    })
+    void testSuperficieInvalidaNumeroStanzeValido(int superficie, int numeroStanze) {
+        boolean res = annuncioVerifier.areSuperficieENumeroStanzeValidi(superficie, numeroStanze);
+
+        assertFalse(res);
     }
 
     //3
-    @Test
-    void testSuperficieValidaNumeroStanzeInvalido() {
-        assertFalse(annuncioVerifier.areSuperficieENumeroStanzeValidi(80, -3));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' superficie è valida ma ' ' {1} ' ' stanze è invalido")
+    @CsvSource({
+            "1, 0",
+            "2, -1",
+            "500000, -1000",
+    })
+    void testSuperficieValidaNumeroStanzeInvalido(int superficie, int numeroStanze) {
+        boolean res = annuncioVerifier.areSuperficieENumeroStanzeValidi(superficie, numeroStanze);
+
+        assertFalse(res);
     }
 
     //1
     @Test
     void testPianoTERRANumeroPianoNULL() {
-        assertTrue(annuncioVerifier.arePianoENumeroPianoValidi(Piano.TERRA, null));
+        Piano piano = Piano.TERRA;
+        Integer numeroPiano = null;
+
+        boolean res = annuncioVerifier.arePianoENumeroPianoValidi(piano, numeroPiano);
+
+        assertTrue(res);
     }
 
     //2
-    @Test
-    void testPianoINTERMEDIONumeroPianoPositivo() {
-        assertTrue(annuncioVerifier.arePianoENumeroPianoValidi(Piano.INTERMEDIO, 1));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' numeroPiano valido")
+    @CsvSource({
+            "1",
+            "2",
+            "500000",
+    })
+    void testPianoINTERMEDIONumeroPianoPositivo(Integer numeroPiano) {
+        assertTrue(annuncioVerifier.arePianoENumeroPianoValidi(Piano.INTERMEDIO, numeroPiano));
     }
 
     //3
     @Test
     void testPianoULTIMONumeroPianoNULL() {
-        assertTrue(annuncioVerifier.arePianoENumeroPianoValidi(Piano.ULTIMO, null));
+        Piano piano = Piano.ULTIMO;
+        Integer numeroPiano = null;
+
+        boolean res = annuncioVerifier.arePianoENumeroPianoValidi(piano, numeroPiano);
+
+        assertTrue(res);
     }
 
     //4
-    @Test
-    void testPianoINTERMEDIONumeroPianoNegativo() {
-        assertFalse(annuncioVerifier.arePianoENumeroPianoValidi(Piano.INTERMEDIO, -1));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' numeroPiano invalido")
+    @CsvSource({
+            "0",
+            "-1",
+            "-500000",
+    })
+    void testPianoINTERMEDIONumeroPianoInvalido(Integer numeroPiano) {
+        Piano piano = Piano.INTERMEDIO;
+
+        boolean res = annuncioVerifier.arePianoENumeroPianoValidi(piano, numeroPiano);
+
+        assertFalse(res);
     }
 
     //1
-    @Test
-    void testIndirizzoValidoLatitudineValidaLongitudineValida() {
-        assertTrue(annuncioVerifier.isPosizioneAnnuncioValida("Minecraft city, Chemin Rémy, Dampierre-en-Burly, France", 47.73909253263101, 2.5195524489149523));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine ' ' {2} ' ' longitudine sono validi")
+    @CsvSource({
+            "\"Antartide\", -90, -180",
+            "\"Antartide 2\", -89, -179",
+            "\"Oceano Atlantico Meridionale\", 0, 0",
+            "\"Mar Glaciale Artico 2\", 89, 179",
+            "\"Mar Glaciale Artico\", 90, 180"
+    })
+    void testIndirizzoValidoLatitudineValidaLongitudineValida(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertTrue(res);
     }
 
     //2
-    @Test
-    void testIndirizzoValidoLatitudineMinoreLongitudineValida() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida("Strada Provinciale 330, 8, Raviscanina, Province of Caserta, Italy", -91.24380, 100.3489230));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine invalida ' ' {2} ' ' longitudine")
+    @CsvSource({
+            "\"Posto sconosciuto\", -92, -180",
+            "\"Posto meno sconosciuto\", -91, -179",
+            "\"posto disperso\", -200, 0",
+            "\"in un universo parallelo\", -4000, 179",
+            "\"ancora più disperso\", -6000, 180"
+    })
+    void testIndirizzoValidoLatitudineMinoreLongitudineValida(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 
     //3
-    @Test
-    void testIndirizzoValidoLatitudineValidaLongitudineMinore() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida("Via Isonzo, 8, Alvignano, Province of Caserta, Italy", 7.3294238, -182.348093));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine ' ' {2} ' ' longitudine invalida")
+    @CsvSource({
+            "\"Posto sconosciuto2\", -90, -182",
+            "\"Posto meno sconosciuto2\", -89, -181",
+            "\"posto disperso2\", -0, -300",
+            "\"in un universo parallelo2\", 89, -3000",
+            "\"ancora più disperso2\", 90, -6000"
+    })
+    void testIndirizzoValidoLatitudineValidaLongitudineMinore(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 
     //4
-    @Test
-    void testIndirizzoNULLlatitudineValidaLongitudineValida() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida(null, 10.1238291309, 45.342908));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine ' ' {2} ' ' longitudine")
+    @CsvSource({
+            ", -90, -180",
+            ", -89, -179",
+            ", -0, 0",
+            ", 89, 179",
+            ", 90, 180"
+    })
+    void testIndirizzoNULLlatitudineValidaLongitudineValida(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 
     //5
-    @Test
-    void testIndirizzoValidoLatitudineMaggioreLongitudineValida() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida("Via Floriano del Secolo, 3, Napoli, Metropolitan City of Naples, Italy", 92.210398, 80.34098));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine invalida ' ' {2} ' ' longitudine")
+    @CsvSource({
+            "\"Posto sconosciuto3\", 92, -180",
+            "\"Posto meno sconosciuto3\", 91, -179",
+            "\"posto disperso3\", 200, 0",
+            "\"in un universo parallelo3\", 4000, 179",
+            "\"ancora più disperso3\", 6000, 180"
+    })
+    void testIndirizzoValidoLatitudineMaggioreLongitudineValida(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 
     //6
-    @Test
-    void testIndirizzoValidoLatitudineValidaLongitudineMaggiore() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida("Via Dalmazia, 13, Napoli, Metropolitan City of Naples, Italy", 50.023498, 182.234098));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo, ' ' {1} ' ' latitudine ' ' {2} ' ' longitudine invalida")
+    @CsvSource({
+            "\"Posto sconosciuto2\", -90, 182",
+            "\"Posto meno sconosciuto2\", -89, 181",
+            "\"posto disperso2\", -0, 300",
+            "\"in un universo parallelo2\", 89, 3000",
+            "\"ancora più disperso2\", 90, 6000"
+    })
+    void testIndirizzoValidoLatitudineValidaLongitudineMaggiore(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 
     //7
-    @Test
-    void testIndirizzoVuotoLatitudineValidaLongitudineValida() {
-        assertFalse(annuncioVerifier.isPosizioneAnnuncioValida("", 10.1238291309, 45.342908));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' indirizzo vuoto, ' ' {1} ' ' latitudine ' ' {2} ' ' longitudine")
+    @CsvSource({
+            "'', -90, -180",
+            "'', -89, -179",
+            "'', -0, 0",
+            "'', 89, 179",
+            "'', 90, 180"
+    })
+    void testIndirizzoVuotoLatitudineValidaLongitudineValida(String indirizzo, double latitudine, double longitudine) {
+        boolean res = annuncioVerifier.isPosizioneAnnuncioValida(indirizzo, latitudine, longitudine);
+
+        assertFalse(res);
     }
 }

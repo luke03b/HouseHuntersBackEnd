@@ -5,6 +5,8 @@ import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.verifiers.OffertaVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 
 import java.time.LocalDate;
@@ -28,8 +30,13 @@ class OffertaVerifierTest {
     }
 
     //1
-    @Test
-    void testValoreOffertaValidoPrezzoAnnuncioValidoDataValida() {
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta e ' ' {1} ' ' prezzoAnnuncio  ' ' {2} ' ' dataOfferta sono validi")
+    @CsvSource({
+            "1, 1",
+            "2, 2",
+            "500000, 1000",
+    })
+    void testValoreOffertaValidoPrezzoAnnuncioValidoDataValida(double valoreofferta, double prezzoAnnuncio, LocalDate dataOfferta) {
         assertTrue(offertaVerifier.areAttributiOffertaValidi(100000, 120000, LocalDate.now()));
     }
 
