@@ -18,7 +18,6 @@ public class Caratteristiche {
         this.giardino = giardino;
     }
 
-
     public Boolean getGarage() {
         return garage;
     }
