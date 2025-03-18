@@ -12,7 +12,7 @@ public class MeteoService {
     public PrevisioniMeteo recuperaPrevisioniMeteo(double latitudine, double longitudine) {
         RestTemplate restTemplate = new RestTemplate();
 
-        // Costruzione dell'URL con parametri di query
+
         String url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
                 .queryParam("latitude", latitudine)
                 .queryParam("longitude", longitudine)
@@ -22,7 +22,7 @@ public class MeteoService {
                 .queryParam("forecast_days", "15")
                 .toUriString();
 
-        // Effettua la richiesta HTTP GET e deserializza la risposta in un DTO
+
         return restTemplate.getForObject(url, PrevisioniMeteo.class);
     }
 }

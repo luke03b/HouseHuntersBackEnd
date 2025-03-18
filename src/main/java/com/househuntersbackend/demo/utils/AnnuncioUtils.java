@@ -83,8 +83,7 @@ public class AnnuncioUtils {
             vicinoParchi = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), PARCHI);
             vicinoTrasporti = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), TRASPORTI);
         } catch (IOException e) {
-            e.printStackTrace(); // Gestisci l'eccezione
-            // Puoi anche loggare l'errore o intraprendere altre azioni
+            e.printStackTrace();
         }
         annuncio.setVicinoScuole(vicinoScuole);
         annuncio.setVicinoParchi(vicinoParchi);
