@@ -40,7 +40,7 @@ public class UsersService {
                 throw new UtenteNonValidoException(e.getMessage());
             }
         } else {
-            throw new UtenteNonTrovatoException("L'utente con sub " + user.getSub() + " non e' presente nei nostri database");
+            throw new UtenteNonTrovatoException("L'utente con sub " + user.getSub() + " e' già presente nei nostri database");
         }
     }
 
