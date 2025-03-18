@@ -1,5 +1,6 @@
 package com.househuntersbackend.demo.utils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,5 +52,29 @@ public class DateUtils {
         int giorno = ((h + l - 7 * m + 114) % 31) + 1;
 
         return LocalDate.of(anno, mese, giorno);
+    }
+
+    public static LocalDate assegnaDataNonFestiva(LocalDate dataProva, boolean aggiungiGiorni) {
+        if(dataProva.getDayOfWeek() == DayOfWeek.SUNDAY || DateUtils.getFestivitaItaliane().contains(dataProva)) {
+            if(aggiungiGiorni) {
+                dataProva = dataProva.plusDays(1);
+            } else {
+                dataProva = dataProva.minusDays(1);
+            }
+            dataProva = assegnaDataNonFestiva(dataProva, aggiungiGiorni);
+        }
+        return dataProva;
+    }
+
+    public static LocalDate assegnaDomenica(LocalDate dataProva, boolean aggiungiGiorni) {
+        if(dataProva.getDayOfWeek() != DayOfWeek.SUNDAY) {
+            if(aggiungiGiorni) {
+                dataProva = dataProva.plusDays(1);
+            } else {
+                dataProva = dataProva.minusDays(1);
+            }
+            dataProva = assegnaDomenica(dataProva, aggiungiGiorni);
+        }
+        return dataProva;
     }
 }

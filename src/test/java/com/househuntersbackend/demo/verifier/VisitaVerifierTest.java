@@ -31,30 +31,6 @@ class VisitaVerifierTest {
         assertThrows(VisitaNonValidaException.class, () -> visitaVerifier.areAttributiVisitaValidi(data, inizio, fine));
     }
 
-    private LocalDate assegnaDataNonFestiva(LocalDate dataProva, boolean aggiungiGiorni) {
-        if(dataProva.getDayOfWeek() == DayOfWeek.SUNDAY || DateUtils.getFestivitaItaliane().contains(dataProva)) {
-            if(aggiungiGiorni) {
-                dataProva = dataProva.plusDays(1);
-            } else {
-                dataProva = dataProva.minusDays(1);
-            }
-            dataProva = assegnaDataNonFestiva(dataProva, aggiungiGiorni);
-        }
-        return dataProva;
-    }
-
-    private LocalDate assegnaDomenica(LocalDate dataProva, boolean aggiungiGiorni) {
-        if(dataProva.getDayOfWeek() != DayOfWeek.SUNDAY) {
-            if(aggiungiGiorni) {
-                dataProva = dataProva.plusDays(1);
-            } else {
-                dataProva = dataProva.minusDays(1);
-            }
-            dataProva = assegnaDomenica(dataProva, aggiungiGiorni);
-        }
-        return dataProva;
-    }
-
     @BeforeEach
     void setUp() {
         this.visitaVerifier = new VisitaVerifier(visiteRepository, offerteRepository);
@@ -69,7 +45,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioMattinaOrarioFineMattina(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(2);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertTrue(visitaVerifier.areAttributiVisitaValidi(dataProva, orarioInizio, orarioFine));
     }
@@ -85,7 +61,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioPomeriggioOrarioFinePomeriggio(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(10);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertTrue(visitaVerifier.areAttributiVisitaValidi(dataProva, orarioInizio, orarioFine));
     }
@@ -99,7 +75,7 @@ class VisitaVerifierTest {
     })
     void testDataOggiOrarioInizioMattinaOrarioFineMattina(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now();
-        dataProva = assegnaDataNonFestiva(dataProva, false);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, false);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -113,7 +89,7 @@ class VisitaVerifierTest {
     })
     void testDataOltreDueSettimaneOrarioInizioMattinaOrarioFineMattina(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(15);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -127,7 +103,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioPrimaDiOrarioLavorativoOrarioFineMattina(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(10);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -142,7 +118,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioPausaPranzoOrarioFinePomeriggio(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(4);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -157,7 +133,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioDopoOrarioLavorativoOrarioFinePomeriggio(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(2);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -172,7 +148,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioMattinaOrarioFineInvalidoMattina(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(1);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -187,7 +163,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioPomeriggioOrarioFinePausaPranzo(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(4);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -202,7 +178,7 @@ class VisitaVerifierTest {
     })
     void testDataValidaOrarioInizioPomeriggioOrarioFineDopoOrarioLavorativo(LocalTime orarioInizio, LocalTime orarioFine) {
         LocalDate dataProva = LocalDate.now().plusDays(7);
-        dataProva = assegnaDataNonFestiva(dataProva, true);
+        dataProva = DateUtils.assegnaDataNonFestiva(dataProva, true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }
@@ -229,7 +205,7 @@ class VisitaVerifierTest {
             "17:00, 18:00",
     })
     void testDataDomenicaOrarioInizioPomeriggioOrarioFinePomeriggio(LocalTime orarioInizio, LocalTime orarioFine) {
-        LocalDate dataProva = assegnaDomenica(LocalDate.now(), true);
+        LocalDate dataProva = DateUtils.assegnaDomenica(LocalDate.now(), true);
 
         assertVisitaNonValida(dataProva, orarioInizio, orarioFine);
     }

@@ -30,7 +30,11 @@ public class UsersService {
     public Users createUser(Users user) throws UtenteNonValidoException, UtenteNonTrovatoException {
         if(!usersRepository.existsBySub(user.getSub())) {
             try {
-                usersVerifier.areUserAttributiValidi(user.getEmail(), user.getNome(), user.getCognome(), user.getTipo(), user.getAgenzia().getId().toString());
+                if(user.getAgenzia() != null) {
+                    usersVerifier.areUserAttributiValidi(user.getEmail(), user.getNome(), user.getCognome(), user.getTipo(), user.getAgenzia().getId().toString());
+                } else {
+                    usersVerifier.areUserAttributiValidi(user.getEmail(), user.getNome(), user.getCognome(), user.getTipo(), null);
+                }
                 return usersRepository.save(user);
             } catch (UtenteNonValidoException e) {
                 throw new UtenteNonValidoException(e.getMessage());
