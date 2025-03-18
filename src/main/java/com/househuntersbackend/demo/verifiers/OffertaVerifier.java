@@ -26,7 +26,7 @@ public class OffertaVerifier {
             throw new OffertaNonValidaException("Un annuncio non può avere un prezzo negativo o nullo");
         }
 
-        if(valoreOfferta >= prezzoAnnuncio) {
+        if(valoreOfferta > prezzoAnnuncio) {
             throw new OffertaNonValidaException("L'offerta non può avere un valore maggiore del prezzo dell'annuncio");
         }
 

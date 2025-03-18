@@ -4,7 +4,6 @@ import com.househuntersbackend.demo.exceptions.OffertaNonValidaException;
 import com.househuntersbackend.demo.repositories.OfferteRepository;
 import com.househuntersbackend.demo.verifiers.OffertaVerifier;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
@@ -30,31 +29,64 @@ class OffertaVerifierTest {
     }
 
     //1
-    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta e ' ' {1} ' ' prezzoAnnuncio  ' ' {2} ' ' dataOfferta sono validi")
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta e ' ' {1} ' ' prezzoAnnuncio sono validi")
     @CsvSource({
             "1, 1",
             "2, 2",
-            "500000, 1000",
+            "200000, 500000",
+            "1000000, 2000000",
+            "90000000, 100000000",
     })
-    void testValoreOffertaValidoPrezzoAnnuncioValidoDataValida(double valoreofferta, double prezzoAnnuncio, LocalDate dataOfferta) {
-        assertTrue(offertaVerifier.areAttributiOffertaValidi(100000, 120000, LocalDate.now()));
+    void testValoreOffertaValidoPrezzoAnnuncioValidoDataValida(double valoreofferta, double prezzoAnnuncio) {
+        LocalDate dataOfferta = LocalDate.now();
+
+        boolean res = offertaVerifier.areAttributiOffertaValidi(valoreofferta, prezzoAnnuncio, dataOfferta);
+
+        assertTrue(res);
     }
 
     //2
-    @Test
-    void testValoreOffertaValidoPrezzoAnnuncioNonValidoDataValida() {
-        assertOffertaNonValida(50000, 0, LocalDate.now());
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta e ' ' {1} ' ' prezzoAnnuncio invalido")
+    @CsvSource({
+            "1, 0",
+            "2, -1",
+            "200000, -200000",
+            "1000000, -2000000",
+            "90000000, -100000000",
+    })
+    void testValoreOffertaValidoPrezzoAnnuncioNonValidoDataValida(double valoreOfferta, double prezzoAnnuncio) {
+        LocalDate dataOfferta = LocalDate.now();
+
+        assertOffertaNonValida(valoreOfferta, prezzoAnnuncio, dataOfferta);
     }
 
     //3
-    @Test
-    void testValoreOffertaValidoPrezzoAnnuncioValidoDataInvalida() {
-        assertOffertaNonValida(50000, 100000, LocalDate.now().plusDays(2));
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta e ' ' {1} ' ' prezzoAnnuncio sono validi, data invalida")
+    @CsvSource({
+            "1, 1",
+            "2, 2",
+            "200000, 500000",
+            "1000000, 2000000",
+            "90000000, 100000000",
+    })
+    void testValoreOffertaValidoPrezzoAnnuncioValidoDataInvalida(double valoreOfferta, double prezzoAnnuncio) {
+        LocalDate dataOfferta = LocalDate.now().plusDays(2);
+
+        assertOffertaNonValida(valoreOfferta, prezzoAnnuncio, dataOfferta);
     }
 
     //4
-    @Test
-    void testValoreOffertaInvalidoPrezzoAnnuncioValidoDataInvalida() {
-        assertOffertaNonValida(110000, 100000, LocalDate.now());
+    @ParameterizedTest(name = "Test {index} ==> ' ' {0} ' ' valoreOfferta invalido e ' ' {1} ' ' prezzoAnnuncio")
+    @CsvSource({
+            "0, 1",
+            "-1, 2",
+            "-200000, 500000",
+            "-1000000, 2000000",
+            "-90000000, 100000000",
+    })
+    void testValoreOffertaInvalidoPrezzoAnnuncioValidoDataInvalida(double valoreOfferta, double prezzoAnnuncio) {
+        LocalDate dataOfferta = LocalDate.now();
+
+        assertOffertaNonValida(valoreOfferta, prezzoAnnuncio, dataOfferta);
     }
 }
