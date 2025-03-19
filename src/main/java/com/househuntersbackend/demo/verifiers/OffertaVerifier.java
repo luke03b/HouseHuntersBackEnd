@@ -23,11 +23,11 @@ public class OffertaVerifier {
         }
 
         if(prezzoAnnuncio <= 0) {
-            throw new OffertaNonValidaException("Un annuncio non può avere un prezzo negativo o nullo");
+            throw new OffertaNonValidaException("Un annuncio non puo' avere un prezzo negativo o nullo");
         }
 
         if(valoreOfferta > prezzoAnnuncio) {
-            throw new OffertaNonValidaException("L'offerta non può avere un valore maggiore del prezzo dell'annuncio");
+            throw new OffertaNonValidaException("L'offerta non puo' avere un valore maggiore del prezzo dell'annuncio");
         }
 
         if(!dataOfferta.isEqual(LocalDate.now())) {
@@ -39,17 +39,17 @@ public class OffertaVerifier {
 
     public boolean isOffertaEsistente(Offerte offerte) throws OffertaNonValidaException {
         boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
-                offerte.getAnnuncio(), offerte.getCliente(), StatoOfferta.IN_ATTESA, StatoOfferta.CONTROPROPOSTA
+                offerte.getAnnuncio().getId().toString(), offerte.getCliente().getId().toString(), StatoOfferta.IN_ATTESA.toString(), StatoOfferta.CONTROPROPOSTA.toString()
         );
 
         if (esisteInAttesa && offerte.getCliente().getTipo().equals(TipoUtente.CLIENTE)) {
-            throw new OffertaNonValidaException("L'utente ha già un'offerta in attesa per questo annuncio.");
+            throw new OffertaNonValidaException("L'utente ha gia' un'offerta in attesa per questo annuncio.");
         }
 
         boolean esisteAccettata = offerteRepository.existsByAnnuncioAndStato(offerte.getAnnuncio(), StatoOfferta.ACCETTATA);
 
         if(esisteAccettata){
-            throw new OffertaNonValidaException("Esiste già un'offerta accettata per l'annuncio");
+            throw new OffertaNonValidaException("Esiste gia' un'offerta accettata per l'annuncio");
         }
 
         return true;

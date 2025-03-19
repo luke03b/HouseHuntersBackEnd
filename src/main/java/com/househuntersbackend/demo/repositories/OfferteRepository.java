@@ -2,7 +2,6 @@ package com.househuntersbackend.demo.repositories;
 
 import com.househuntersbackend.demo.entities.Annunci;
 import com.househuntersbackend.demo.entities.Offerte;
-import com.househuntersbackend.demo.entities.Users;
 import com.househuntersbackend.demo.enumerations.StatoOfferta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,7 +15,22 @@ public interface OfferteRepository extends JpaRepository<Offerte, UUID> {
     @Query(value = "SELECT * FROM offerte WHERE id_annuncio = :idAnnuncio", nativeQuery = true)
     List<Offerte> findOfferteByAnnuncioId(@Param("idAnnuncio") UUID idAnnuncio);
 
-    boolean existsByAnnuncioAndClienteAndStatoOrStato(Annunci annuncio, Users cliente, StatoOfferta stato, StatoOfferta stato2);
+    @Query(value = """
+    SELECT EXISTS (
+        SELECT 1\s
+        FROM offerte\s
+        WHERE id_annuncio = CAST(:annuncioId AS UUID)\s
+          AND id_cliente = CAST(:clienteId AS UUID)\s
+          AND (stato = :stato OR stato = :stato2)
+    )
+   \s""", nativeQuery = true)
+    boolean existsByAnnuncioAndClienteAndStatoOrStato(
+            @Param("annuncioId") String annuncioId,
+            @Param("clienteId") String clienteId,
+            @Param("stato") String stato,
+            @Param("stato2") String stato2
+    );
+
 
     @Query("SELECT o FROM Offerte o WHERE o.cliente.id = :idCliente")
     List<Offerte> findOfferteConAnnuncioByClienteId(@Param("idCliente") UUID idCliente);

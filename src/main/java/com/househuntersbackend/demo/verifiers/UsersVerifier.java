@@ -29,7 +29,7 @@ public class UsersVerifier {
         }
 
         if ((tipo.equals(TipoUtente.CLIENTE) && idAgenziaImmobiliare != null)) {
-            throw new UtenteNonValidoException("Se l'utente è di tipo CLIENTE non può avere un'agenzia immobiliare, mentre ADMIN o AGENTE devono averne una valida");
+            throw new UtenteNonValidoException("Se l'utente e' di tipo CLIENTE non puo' avere un'agenzia immobiliare, mentre ADMIN o AGENTE devono averne una valida");
         }
 
         return true;
