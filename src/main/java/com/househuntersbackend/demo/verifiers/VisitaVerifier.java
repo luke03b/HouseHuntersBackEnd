@@ -77,7 +77,7 @@ public class VisitaVerifier {
 
     public boolean isVisitaEsistente(Visite visita) throws VisitaNonValidaException {
         boolean esisteInAttesaOAccettataCliente = visiteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
-                visita.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.ACCETTATA, visita.getAnnuncio()
+                visita.getCliente(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visita.getAnnuncio()
         );
 
         if (esisteInAttesaOAccettataCliente) {
@@ -85,7 +85,7 @@ public class VisitaVerifier {
         }
 
         boolean esisteInAttesaOAccettataFasciaOraria = visiteRepository.existsByAnnuncioAndStatoOrStatoAndDataAndOrarioInizio(
-                visita.getAnnuncio(), StatoVisita.IN_ATTESA, StatoVisita.ACCETTATA, visita.getData(), visita.getOrarioInizio()
+                visita.getAnnuncio(), StatoVisita.IN_ATTESA, StatoVisita.CONFERMATA, visita.getData(), visita.getOrarioInizio()
         );
 
         if(esisteInAttesaOAccettataFasciaOraria) {

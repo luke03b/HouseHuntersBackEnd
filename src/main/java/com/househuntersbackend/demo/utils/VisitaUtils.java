@@ -9,12 +9,13 @@ public class VisitaUtils {
     private VisitaUtils() {}
 
     public static StatoVisita mappaStatoVisita(String statoVisita) {
-        if(statoVisita.equals(StatoVisita.ACCETTATA.toString())) {
-            return StatoVisita.ACCETTATA;
-        } else if (statoVisita.equals(StatoVisita.IN_ATTESA.toString())){
+        if(statoVisita.equals(StatoVisita.CONFERMATA.toString().toUpperCase())) {
+            return StatoVisita.CONFERMATA;
+        } else if (statoVisita.equals(StatoVisita.IN_ATTESA.toString().toUpperCase())) {
             return StatoVisita.IN_ATTESA;
-        } else {
+        } else if (statoVisita.equals(StatoVisita.RIFIUTATA.toString().toUpperCase())) {
             return StatoVisita.RIFIUTATA;
         }
+        return null;
     }
 }
