@@ -37,7 +37,8 @@ public class OffertaVerifier {
         return true;
     }
 
-    public boolean isOffertaEsistente(Offerte offerte) throws OffertaNonValidaException {
+    public void checkOffertaEsistente(Offerte offerte) throws OffertaNonValidaException {
+        if(offerte.getCliente() == null) {return;}
         boolean esisteInAttesa = offerteRepository.existsByAnnuncioAndClienteAndStatoOrStato(
                 offerte.getAnnuncio().getId().toString(), offerte.getCliente().getId().toString(), StatoOfferta.IN_ATTESA.toString(), StatoOfferta.CONTROPROPOSTA.toString()
         );
@@ -51,7 +52,5 @@ public class OffertaVerifier {
         if(esisteAccettata){
             throw new OffertaNonValidaException("Esiste gia' un'offerta accettata per l'annuncio");
         }
-
-        return true;
     }
 }

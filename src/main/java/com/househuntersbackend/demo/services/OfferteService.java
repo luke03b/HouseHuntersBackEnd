@@ -34,7 +34,7 @@ public class OfferteService {
 
     public Offerte createOfferte(Offerte offerte) throws OffertaNonValidaException {
         try{
-            offertaVerifier.isOffertaEsistente(offerte);
+            offertaVerifier.checkOffertaEsistente(offerte);
             offerte.setStato(StatoOfferta.IN_ATTESA);
             offerte.setData(LocalDateTime.now());
             offertaVerifier.areAttributiOffertaValidi(offerte.getPrezzo(), offerte.getAnnuncio().getPrezzo(), offerte.getData().toLocalDate());
