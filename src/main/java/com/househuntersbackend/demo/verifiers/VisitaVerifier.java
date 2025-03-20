@@ -53,14 +53,14 @@ public class VisitaVerifier {
 
         if(orarioInizioVisita.isBefore(ORARIO_INIZIO_MINIMO_PRENOTAZIONE) || orarioInizioVisita.isAfter(ORARIO_INIZIO_MASSIMO_PRENOTAZIONE)) {
             throw new VisitaNonValidaException("Orario inizio visita non valido, le visite possono avere come orario d'inizio un valore che vada dalle "
-                    + ORARIO_INIZIO_MINIMO_PRENOTAZIONE + " alle " + ORARIO_INIZIO_PAUSA_PRANZO.minusHours(1) + " e dalle " + ORARIO_FINE_PAUSA_PRANZO +
-                    " alle " + ORARIO_INIZIO_MASSIMO_PRENOTAZIONE);
+                    + ORARIO_INIZIO_MINIMO_PRENOTAZIONE + " " + "alle" + " " + ORARIO_INIZIO_PAUSA_PRANZO.minusHours(1) + " e dalle " + ORARIO_FINE_PAUSA_PRANZO +
+                    " " + "alle" + " " + ORARIO_INIZIO_MASSIMO_PRENOTAZIONE);
         }
 
         if(orarioFineVisita.isBefore(ORARIO_FINE_MINIMO_PRENOTAZIONE) || orarioFineVisita.isAfter(ORARIO_FINE_MASSIMO_PRENOTAZIONE)) {
             throw new VisitaNonValidaException("Orario fine visita non valido, le visite possono avere come orario di fine un valore che vada dalle "
-                    + ORARIO_FINE_MINIMO_PRENOTAZIONE + " alle " + ORARIO_INIZIO_PAUSA_PRANZO + " e dalle " + ORARIO_FINE_PAUSA_PRANZO.plusHours(1) +
-                    " alle " + ORARIO_FINE_MASSIMO_PRENOTAZIONE);
+                    + ORARIO_FINE_MINIMO_PRENOTAZIONE + " " + "alle" + " " + ORARIO_INIZIO_PAUSA_PRANZO + " e dalle " + ORARIO_FINE_PAUSA_PRANZO.plusHours(1) +
+                    " " + "alle" + " " + ORARIO_FINE_MASSIMO_PRENOTAZIONE);
         }
 
         if ((orarioInizioVisita.isAfter(ORARIO_INIZIO_PAUSA_PRANZO) && orarioInizioVisita.isBefore(ORARIO_FINE_PAUSA_PRANZO)) ||
@@ -68,7 +68,7 @@ public class VisitaVerifier {
                 orarioInizioVisita.equals(ORARIO_INIZIO_PAUSA_PRANZO) || orarioFineVisita.equals(ORARIO_FINE_PAUSA_PRANZO) ||
                 (orarioInizioVisita.isBefore(ORARIO_INIZIO_PAUSA_PRANZO) && orarioFineVisita.isAfter(ORARIO_FINE_PAUSA_PRANZO))) {
             throw new VisitaNonValidaException("Orario non valido, non e' possibile prenotare una visita durante la pausa pranzo degli agenti, ovvero dalle "
-                    + ORARIO_INIZIO_PAUSA_PRANZO + " alle " + ORARIO_FINE_PAUSA_PRANZO);
+                    + ORARIO_INIZIO_PAUSA_PRANZO + " " + "alle" + " " + ORARIO_FINE_PAUSA_PRANZO);
         }
 
         return true;

@@ -16,20 +16,20 @@ import java.io.IOException;
 public class AnnuncioUtils {
 
     @Value("${geoapify.api.key}") private String geoapifyApiKey;
-    private final String SCUOLA = "Scuola";
-    private final String PARCHI = "Parchi";
-    private final String TRASPORTI = "Trasporti";
+    private final String scuola = "Scuola";
+    private final String parchi = "Parchi";
+    private final String trasporti = "Trasporti";
 
     private String urlBuilder(Double latitudine, Double longitudine, String categoria) {
         String url = "https://api.geoapify.com/v2/places?categories=";
         switch (categoria) {
-            case SCUOLA:
+            case scuola:
                 url = url + "education";
                 break;
-            case PARCHI:
+            case parchi:
                 url = url + "leisure.park";
                 break;
-            case TRASPORTI:
+            case trasporti:
                 url = url + "public_transport";
                 break;
             default:
@@ -79,9 +79,9 @@ public class AnnuncioUtils {
         boolean vicinoParchi = false;
         boolean vicinoTrasporti = false;
         try {
-            vicinoScuole = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), SCUOLA);
-            vicinoParchi = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), PARCHI);
-            vicinoTrasporti = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), TRASPORTI);
+            vicinoScuole = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), scuola);
+            vicinoParchi = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), parchi);
+            vicinoTrasporti = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), trasporti);
         } catch (IOException e) {
             e.printStackTrace();
         }
