@@ -7,6 +7,8 @@ import com.househuntersbackend.demo.enumerations.TipoAnnuncio;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,22 +16,23 @@ import java.io.IOException;
 
 @Component
 public class AnnuncioUtils {
+    private static final Logger logger = LoggerFactory.getLogger(AnnuncioUtils.class);
 
     @Value("${geoapify.api.key}") private String geoapifyApiKey;
-    private final String scuola = "Scuola";
-    private final String parchi = "Parchi";
-    private final String trasporti = "Trasporti";
+    private static final String SCUOLA = "Scuola";
+    private static final String PARCHI = "Parchi";
+    private static final String TRASPORTI = "Trasporti";
 
     private String urlBuilder(Double latitudine, Double longitudine, String categoria) {
         String url = "https://api.geoapify.com/v2/places?categories=";
         switch (categoria) {
-            case scuola:
+            case SCUOLA:
                 url = url + "education";
                 break;
-            case parchi:
+            case PARCHI:
                 url = url + "leisure.park";
                 break;
-            case trasporti:
+            case TRASPORTI:
                 url = url + "public_transport";
                 break;
             default:
@@ -65,7 +68,7 @@ public class AnnuncioUtils {
                 return featuresNode != null && featuresNode.isArray() && featuresNode.size() > 0;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Errore durante l'operazione: {}", e.getMessage(), e);
         } finally {
             if (response != null && response.body() != null) {
                 response.body().close();
@@ -79,11 +82,11 @@ public class AnnuncioUtils {
         boolean vicinoParchi = false;
         boolean vicinoTrasporti = false;
         try {
-            vicinoScuole = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), scuola);
-            vicinoParchi = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), parchi);
-            vicinoTrasporti = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), trasporti);
+            vicinoScuole = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), SCUOLA);
+            vicinoParchi = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), PARCHI);
+            vicinoTrasporti = isVicino(annuncio.getLatitudine(), annuncio.getLongitudine(), TRASPORTI);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Errore durante l'operazione: {}", e.getMessage(), e);
         }
         annuncio.setVicinoScuole(vicinoScuole);
         annuncio.setVicinoParchi(vicinoParchi);
